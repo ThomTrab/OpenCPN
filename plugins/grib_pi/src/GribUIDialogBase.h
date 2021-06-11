@@ -276,7 +276,7 @@ class GribSettingsDialogBase : public wxDialog
 		wxStaticText* m_staticText24;
 		wxSlider* m_sTransparency;
 		wxFlexGridSizer* m_fgSetPlaybackSizer;
-		wxStaticText* m_staticText26;
+		wxStaticText* m_stLoopStart;
 		wxChoice* m_cLoopStartPoint;
 		wxSlider* m_sUpdatesPerSecond;
 		wxStaticText* m_tSlicesPerUpdate;
@@ -295,7 +295,6 @@ class GribSettingsDialogBase : public wxDialog
 		wxStaticBitmap* m_biSettings;
 		wxStaticBitmap* m_biRequest;
 		wxStaticText* m_stOverlayTrans;
-		wxStaticText* m_stLoopStart;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }

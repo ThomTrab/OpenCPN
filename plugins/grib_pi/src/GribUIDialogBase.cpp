@@ -1496,6 +1496,7 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	wxScrolledWindow* m_scSetPlaybackPanel;
 	m_scSetPlaybackPanel = new wxScrolledWindow( m_nSettingsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_scSetPlaybackPanel->SetScrollRate( 5, 5 );
+
 	m_fgSetPlaybackSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgSetPlaybackSizer->AddGrowableCol( 0 );
 	m_fgSetPlaybackSizer->SetFlexibleDirection( wxBOTH );
@@ -1516,6 +1517,17 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_fgSlider = new wxFlexGridSizer( 0, 3, 0, 0 );
 	m_fgSlider->SetFlexibleDirection( wxBOTH );
 	m_fgSlider->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* m_fgLoopMode;
+	m_fgLoopMode = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgLoopMode->SetFlexibleDirection( wxBOTH );
+	m_fgLoopMode->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* m_fgTimeInterval;
+	m_fgTimeInterval = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgTimeInterval->SetFlexibleDirection( wxBOTH );
+	m_fgTimeInterval->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgTimeInterval->AddGrowableCol( 1 );
 
     //////////////////////////////////////////////////////////////////
     // m_scSetPlaybackPanel - Widgets definitions
@@ -1557,75 +1569,121 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	                             0 );
 	m_stFast->Wrap( -1 );
 
+    m_cLoopMode = new wxCheckBox( m_scSetPlaybackPanel,
+                                  wxID_ANY,
+                                  _("Loop Mode"),
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  0 );
+
+	m_stLoopStart = new wxStaticText( m_scSetPlaybackPanel,
+	                                  wxID_ANY,
+	                                  _("Loop Start"),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
+	m_stLoopStart->Wrap( -1 );
+
+	wxString m_cLoopStartPointChoices[] = { _("Top of Grib File"),
+	                                        _("Current time forecast") };
+	int m_cLoopStartPointNChoices = sizeof( m_cLoopStartPointChoices ) / sizeof( wxString );
+	m_cLoopStartPoint = new wxChoice( m_scSetPlaybackPanel,
+	                                  wxID_ANY,
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  m_cLoopStartPointNChoices,
+	                                  m_cLoopStartPointChoices,
+	                                  0 );
+	m_cLoopStartPoint->SetSelection( 0 );
+
+	m_cInterpolate = new wxCheckBox( m_scSetPlaybackPanel,
+	                                 wxID_ANY,
+	                                 _("Interpolate between gribs"),
+	                                 wxDefaultPosition,
+	                                 wxDefaultSize,
+	                                 0 );
+
+	m_tSlicesPerUpdate = new wxStaticText( m_scSetPlaybackPanel,
+	                                       wxID_ANY,
+	                                       _("Time Interval"),
+	                                       wxDefaultPosition,
+	                                       wxDefaultSize,
+	                                       0 );
+	m_tSlicesPerUpdate->Wrap( -1 );
+
+	wxArrayString m_sSlicesPerUpdateChoices;
+	m_sSlicesPerUpdate = new wxChoice( m_scSetPlaybackPanel,
+	                                   wxID_ANY,
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   m_sSlicesPerUpdateChoices,
+	                                   0 );
+	m_sSlicesPerUpdate->SetSelection( 0 );
+
     //////////////////////////////////////////////////////////////////////
     // m_scSetPlaybackPanel - Layout definition
     //////////////////////////////////////////////////////////////////////
 
+    //m_fgPlaybackOptions
 	m_fgPlaybackOptions->Add( m_stSpeedControl,
 	                          m_sfVCentered );
-	//m_fgSlider->Add( 0, 0, 1, wxLEFT|wxRIGHT, 15 );
+	//m_fgSlider
 	m_fgSlider->Add( m_stSlow,
 	                 m_sfVCentered );
 	m_fgSlider->Add( m_sUpdatesPerSecond,
 	                 m_sfExpanded);
 	m_fgSlider->Add( m_stFast,
 	                 m_sfVCentered );
+	//END m_fgSlider
 	m_fgPlaybackOptions->Add( m_fgSlider,
 	                          0,
-	                          wxALL|wxALIGN_CENTER_HORIZONTAL,
-	                          5 );
+	                          wxLEFT|wxRIGHT,
+	                          20 );
+	m_fgPlaybackOptions->Add( m_cLoopMode,
+	                          m_sfVCentered );
+	//m_fgLoopMode
+	m_fgLoopMode->Add( m_stLoopStart,
+	                   m_sfVCentered );
+	m_fgLoopMode->Add( m_cLoopStartPoint,
+	                   m_sfExpanded );
+	//END m_fgLoopMode
+	m_fgPlaybackOptions->Add( m_fgLoopMode,
+	                          0,
+                              wxLEFT|wxRIGHT,
+                              20 );
+	m_fgPlaybackOptions->Add( m_cInterpolate,
+	                          m_sfVCentered );
+    //m_fgTimeInterval
+	m_fgTimeInterval->Add( m_tSlicesPerUpdate,
+	                       m_sfVCentered );
+	m_fgTimeInterval->Add( m_sSlicesPerUpdate,
+	                       m_sfExpanded );
+    //END m_fgTimeInterval
+    m_fgPlaybackOptions->Add( m_fgTimeInterval,
+                              0,
+                              wxLEFT|wxRIGHT,
+                              20 );
+	m_sbPlaybackOptions->Add( m_fgPlaybackOptions,
+	                          m_sfSubSizers );
+	m_fgSetPlaybackSizer->Add( m_sbPlaybackOptions,
+	                           m_sfSizers );
 
-	m_cLoopMode = new wxCheckBox( m_scSetPlaybackPanel, wxID_ANY, _("Loop Mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgPlaybackOptions->Add( m_cLoopMode, 0, wxALL, 5 );
-
-	wxFlexGridSizer* fgSizer481;
-	fgSizer481 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer481->SetFlexibleDirection( wxBOTH );
-	fgSizer481->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	fgSizer481->Add( 0, 0, 1, wxLEFT|wxRIGHT, 15 );
-
-	m_staticText26 = new wxStaticText( m_scSetPlaybackPanel, wxID_ANY, _("Loop Start"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText26->Wrap( -1 );
-	fgSizer481->Add( m_staticText26, 0, wxALL|wxEXPAND, 5 );
-
-	wxString m_cLoopStartPointChoices[] = { _("Top of Grib File"), _("Current time forecast") };
-	int m_cLoopStartPointNChoices = sizeof( m_cLoopStartPointChoices ) / sizeof( wxString );
-	m_cLoopStartPoint = new wxChoice( m_scSetPlaybackPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cLoopStartPointNChoices, m_cLoopStartPointChoices, 0 );
-	m_cLoopStartPoint->SetSelection( 0 );
-	fgSizer481->Add( m_cLoopStartPoint, 0, wxALL|wxEXPAND, 5 );
-
-	m_fgPlaybackOptions->Add( fgSizer481, 0, wxALL, 5 );
-
-	m_cInterpolate = new wxCheckBox( m_scSetPlaybackPanel, wxID_ANY, _("Interpolate between gribs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgPlaybackOptions->Add( m_cInterpolate, 0, wxALL|wxEXPAND, 5 );
-
-	wxFlexGridSizer* fgSizer482;
-	fgSizer482 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer482->SetFlexibleDirection( wxBOTH );
-	fgSizer482->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	fgSizer482->Add( 0, 0, 1, wxLEFT|wxRIGHT, 15 );
-
-	m_tSlicesPerUpdate = new wxStaticText( m_scSetPlaybackPanel, wxID_ANY, _("Time Interval"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tSlicesPerUpdate->Wrap( -1 );
-	fgSizer482->Add( m_tSlicesPerUpdate, 0, wxALL|wxEXPAND, 5 );
-
-	wxArrayString m_sSlicesPerUpdateChoices;
-	m_sSlicesPerUpdate = new wxChoice( m_scSetPlaybackPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_sSlicesPerUpdateChoices, 0 );
-	m_sSlicesPerUpdate->SetSelection( 0 );
-	fgSizer482->Add( m_sSlicesPerUpdate, 0, wxALL|wxEXPAND, 5 );
-
-    m_fgPlaybackOptions->Add( fgSizer482, 0, wxALL|wxEXPAND, 5 );
-
-	m_sbPlaybackOptions->Add( m_fgPlaybackOptions, 1, wxEXPAND|wxALL, 5 );
-
-
-	m_fgSetPlaybackSizer->Add( m_sbPlaybackOptions, 1, wxEXPAND|wxTOP, 10 );
+	m_scSetPlaybackPanel->SetSizer( m_fgSetPlaybackSizer );
+	m_scSetPlaybackPanel->Layout();
+	m_fgSetPlaybackSizer->Fit( m_scSetPlaybackPanel );
+	m_nSettingsBook->AddPage( m_scSetPlaybackPanel, _("Playback"), false );
 
     //////////////////////////////////////////////////////////////////////
     // m_scSetGuiPanel - Sub-Sizers Init
     //////////////////////////////////////////////////////////////////////
+	wxScrolledWindow* m_scSetGuiPanel;
+	m_scSetGuiPanel = new wxScrolledWindow( m_nSettingsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_scSetGuiPanel->SetScrollRate( 5, 5 );
+
+	m_fgSetGuiSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgSetGuiSizer->AddGrowableCol( 0 );
+	m_fgSetGuiSizer->SetFlexibleDirection( wxBOTH );
+	m_fgSetGuiSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     //////////////////////////////////////////////////////////////////
     // m_scSetGuiPanel - Widgets definitions
@@ -1635,18 +1693,6 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
     // m_scSetGuiPanel - Layout definition
     //////////////////////////////////////////////////////////////////////
 
-
-	m_scSetPlaybackPanel->SetSizer( m_fgSetPlaybackSizer );
-	m_scSetPlaybackPanel->Layout();
-	m_fgSetPlaybackSizer->Fit( m_scSetPlaybackPanel );
-	m_nSettingsBook->AddPage( m_scSetPlaybackPanel, _("Playback"), false );
-	wxScrolledWindow* m_scSetGuiPanel;
-	m_scSetGuiPanel = new wxScrolledWindow( m_nSettingsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_scSetGuiPanel->SetScrollRate( 5, 5 );
-	m_fgSetGuiSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
-	m_fgSetGuiSizer->AddGrowableCol( 0 );
-	m_fgSetGuiSizer->SetFlexibleDirection( wxBOTH );
-	m_fgSetGuiSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	wxStaticBoxSizer* sbSizer9;
 	sbSizer9 = new wxStaticBoxSizer( new wxStaticBox( m_scSetGuiPanel, wxID_ANY, _("Dialogs Style") ), wxVERTICAL );
@@ -1868,7 +1914,7 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_sButton->AddButton( m_sButtonCancel );
 	m_sButton->Realize();
 
-	m_fgMainSizer->Add( m_sButton, 1, wxEXPAND, 5 );
+	m_fgMainSizer->Add( m_sButton, m_sfSizers);
 
 
 	this->SetSizer( m_fgMainSizer );
