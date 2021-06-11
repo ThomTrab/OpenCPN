@@ -9,13 +9,23 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+//wxSizerFlags m_sfVCentered;
+
+// Plugin Main window
 GRIBUICtrlBarBase::GRIBUICtrlBarBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
+    wxSizerFlags m_sfVCentered(1);
+	m_sfVCentered.Expand()
+                  .Border(wxALL, 5)
+                  .Align(wxLEFT)
+                  .Align(wxALIGN_CENTER_VERTICAL)
+                  .Proportion(1);
+
 #ifdef __OCPN__ANDROID__
     const bool m_bcompact = true;
 #else
     const bool m_bcompact = false;
-#endif    
+#endif
 
     if(m_bcompact){
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -24,7 +34,7 @@ GRIBUICtrlBarBase::GRIBUICtrlBarBase( wxWindow* parent, wxWindowID id, const wxS
         m_fgCtrlBarSizer->AddGrowableCol( 0 );
         m_fgCtrlBarSizer->SetFlexibleDirection( wxHORIZONTAL );
         m_fgCtrlBarSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
-        
+
 	wxBoxSizer *mainBox = new wxBoxSizer(wxVERTICAL);
         m_fgCtrlBarSizer->Add( mainBox, 1, wxEXPAND, 0 );
 
@@ -96,7 +106,7 @@ GRIBUICtrlBarBase::GRIBUICtrlBarBase( wxWindow* parent, wxWindowID id, const wxS
         fgSizer51->Add( m_bpSettings, 0, wxALL, 1 );
 
         m_bpRequest = NULL;
-        
+
 //         m_bpRequest = new wxBitmapButton( this, ID_BTNREQUEST, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 //         fgSizer51->Add( m_bpRequest, 0, wxALL, 1 );
 
@@ -257,7 +267,7 @@ GRIBUICtrlBarBase::GRIBUICtrlBarBase( wxWindow* parent, wxWindowID id, const wxS
 	this->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( GRIBUICtrlBarBase::OnMouseEvent ) );
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( GRIBUICtrlBarBase::OnSize ) );
 
-#ifndef __WXQT__ 
+#ifndef __WXQT__
         this->Connect( wxEVT_PAINT, wxPaintEventHandler( GRIBUICtrlBarBase::OnPaint ) );
 #endif
 	m_bpPrev->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GRIBUICtrlBarBase::OnPrev ), NULL, this );
@@ -294,11 +304,11 @@ GRIBUICtrlBarBase::GRIBUICtrlBarBase( wxWindow* parent, wxWindowID id, const wxS
 
 #ifdef __OCPN__ANDROID__
         m_bpSettings->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GRIBUICtrlBarBase::OnCompositeDialog ), NULL, this );
-#else        
+#else
         m_bpSettings->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GRIBUICtrlBarBase::OnSettings ), NULL, this );
 	m_bpSettings->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( GRIBUICtrlBarBase::OnMouseEvent ), NULL, this );
 #endif
-        
+
         if(m_bpRequest){
             m_bpRequest->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GRIBUICtrlBarBase::OnRequest ), NULL, this );
             m_bpRequest->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( GRIBUICtrlBarBase::OnMouseEvent ), NULL, this );
@@ -355,7 +365,7 @@ GRIBUICtrlBarBase::~GRIBUICtrlBarBase()
             m_bpOpenFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GRIBUICtrlBarBase::OnOpenFile ), NULL, this );
             m_bpOpenFile->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( GRIBUICtrlBarBase::OnMouseEvent ), NULL, this );
         }
-        
+
 	m_bpSettings->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( GRIBUICtrlBarBase::OnSettings ), NULL, this );
 	m_bpSettings->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( GRIBUICtrlBarBase::OnMouseEvent ), NULL, this );
 
@@ -366,6 +376,7 @@ GRIBUICtrlBarBase::~GRIBUICtrlBarBase()
 
 }
 
+// Undefined
 GRIBUICDataBase::GRIBUICDataBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
@@ -395,234 +406,417 @@ GRIBUICDataBase::~GRIBUICDataBase()
 {
 }
 
+// Cursor value window
 CursorDataBase::CursorDataBase( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	fgSizer30 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer30->AddGrowableRow( 1 );
-	fgSizer30->SetFlexibleDirection( wxBOTH );
-	fgSizer30->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+    wxSizerFlags m_sfVCentered(1);
+	m_sfVCentered.Expand()
+                 .Border(wxALL, 5)
+                 .Align(wxALIGN_LEFT)
+                 .Align(wxALIGN_CENTER_VERTICAL)
+                 .Proportion(1);
 
-	m_stTrackingText = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stTrackingText->Wrap( -1 );
-	fgSizer30->Add( m_stTrackingText, 0, wxEXPAND|wxLEFT, 5 );
+	m_fgMainSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
+	//m_fgMainSizer->AddGrowableRow( 1 );
+	m_fgMainSizer->SetFlexibleDirection( wxBOTH );
+	m_fgMainSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
-	wxFlexGridSizer* fgSizer43;
-	fgSizer43 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer43->SetFlexibleDirection( wxBOTH );
-	fgSizer43->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_stTrackingText = new wxStaticText( this,
+	                                     wxID_ANY,
+                                         _("MyLabel"),
+                                         wxDefaultPosition,
+                                         wxDefaultSize,
+                                         0 );
+    // No word wrapping. Usefullness ??
+	//m_stTrackingText->Wrap( -1 );
+	m_fgMainSizer->Add( m_stTrackingText, 0, wxEXPAND|wxLEFT, 5 );
 
+	//Useless additional Sizer
+	//wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
+	//sizerRow->SetFlexibleDirection( wxBOTH );
+	//sizerRow->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+    ////////////////////////////////////////////////////////////////
+    //Sizer Content Definition
+    ////////////////////////////////////////////////////////////////
+
+	m_cbWind = new wxCheckBox( this,
+                               ID_CB_WIND,
+                               _("Wind"),
+                               wxDefaultPosition,
+                               wxDefaultSize,
+                               0 );
+
+	m_tcWindSpeed = new wxTextCtrl( this,
+	                                wxID_ANY,
+	                                wxEmptyString,
+	                                wxDefaultPosition,
+	                                wxSize( 70,-1 ),
+	                                wxTE_READONLY );
+
+	m_tcWindSpeedBf = new wxTextCtrl( this,
+	                                  wxID_ANY,
+                                      wxEmptyString,
+                                      wxDefaultPosition,
+                                      wxSize( 45,-1 ),
+                                      wxTE_READONLY );
+
+	m_tcWindDirection = new wxTextCtrl( this,
+                                        wxID_ANY,
+                                        wxEmptyString,
+                                        wxDefaultPosition,
+                                        wxSize( 45,-1 ),
+                                        wxTE_READONLY );
+
+	m_cbWindGust = new wxCheckBox( this,
+	                               ID_CB_WIND_GUSTS,
+	                               _("Wind Gust"),
+	                               wxDefaultPosition,
+	                               wxDefaultSize,
+	                               0 );
+
+	m_tcWindGust = new wxTextCtrl( this,
+	                               wxID_ANY,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxSize( 70,-1 ),
+                                   wxTE_READONLY );
+
+	m_cbPressure = new wxCheckBox( this,
+                                   ID_CB_PRESSURE,
+                                   _("Pressure"),
+                                   wxDefaultPosition,
+                                   wxDefaultSize,
+                                   0 );
+
+	m_tcPressure = new wxTextCtrl( this,
+                                   wxID_ANY,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxSize( 300,-1 ),
+                                   wxTE_READONLY );
+	m_tcPressure->SetToolTip( _("Mean Sea Level Pressure (MSLP)") );
+	m_tcPressure->SetMinSize( wxSize( 300,-1 ) );
+
+	m_cbWave = new wxCheckBox( this,
+	                           ID_CB_WAVES,
+	                           _("Waves"),
+	                           wxDefaultPosition,
+	                           wxDefaultSize,
+	                           0 );
+
+	m_tcWaveHeight = new wxTextCtrl( this,
+                                     wxID_ANY,
+                                     wxEmptyString,
+                                     wxDefaultPosition,
+                                     //wxSize( 70,-1 ),
+                                     wxSize( -1,-1 ),
+                                     wxTE_READONLY );
+	m_tcWaveHeight->SetToolTip( _("Significant Wave Height") );
+
+	m_tcWavePeriode = new wxTextCtrl( this,
+	                                  wxID_ANY,
+	                                  wxEmptyString,
+	                                  wxDefaultPosition,
+	                                  wxSize( 45,-1 ),
+	                                  wxTE_READONLY );
+	m_tcWavePeriode->SetToolTip( _("Waves period") );
+
+	m_tcWaveDirection = new wxTextCtrl( this,
+	                                    wxID_ANY,
+	                                    wxEmptyString,
+	                                    wxDefaultPosition,
+	                                    wxSize( 45,-1 ),
+	                                    wxTE_READONLY );
+	m_tcWaveDirection->SetToolTip( _("Waves Direction") );
+
+	m_cbCurrent = new wxCheckBox( this,
+	                              ID_CB_CURRENT,
+	                              _("Current"),
+	                              wxDefaultPosition,
+	                              wxDefaultSize,
+	                              0 );
+
+	m_tcCurrentVelocity = new wxTextCtrl( this,
+	                                      wxID_ANY,
+	                                      wxEmptyString,
+	                                      wxDefaultPosition,
+	                                      wxSize( 70,-1 ),
+	                                      wxTE_READONLY );
+	m_tcCurrentVelocity->SetToolTip( _("Surface Current Speed") );
+
+	m_tcCurrentDirection = new wxTextCtrl( this,
+                                           wxID_ANY,
+                                           wxEmptyString,
+                                           wxDefaultPosition,
+                                           wxSize( 45,-1 ),
+                                           wxTE_READONLY );
+	m_tcCurrentDirection->SetToolTip( _("Surface Current Direction") );
+
+	m_cbPrecipitation = new wxCheckBox( this,
+	                                    ID_CB_RAINFALL,
+                                        _("Rainfall"),
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        0 );
+
+	m_tcPrecipitation = new wxTextCtrl( this,
+	                                    wxID_ANY,
+	                                    wxEmptyString,
+	                                    wxDefaultPosition,
+	                                    wxSize( 70,-1 ),
+	                                    wxTE_READONLY );
+	m_tcPrecipitation->SetToolTip( _("Cumulative Rainfall per Hour") );
+
+	m_cbCloud = new wxCheckBox( this,
+                                ID_CB_CLOUD_COVER,
+                                _("Cloud Cover"),
+                                wxDefaultPosition,
+                                wxDefaultSize,
+                                0 );
+
+	m_tcCloud = new wxTextCtrl( this,
+	                            wxID_ANY,
+	                            wxEmptyString,
+	                            wxDefaultPosition,
+	                            wxSize( 70,-1 ),
+	                            wxTE_READONLY );
+	m_tcCloud->SetToolTip( _("Cloud Cover") );
+
+	m_cbAirTemperature = new wxCheckBox( this,
+	                                     ID_CB_AIR_TEMP,
+	                                     _("Air Temp"),
+	                                     wxDefaultPosition,
+	                                     wxDefaultSize, 0 );
+
+	m_tcAirTemperature = new wxTextCtrl( this,
+	                                     wxID_ANY,
+	                                     wxEmptyString,
+	                                     wxDefaultPosition,
+	                                     wxSize( -1,-1 ),
+	                                     //wxSize( 70,-1 ),
+	                                     wxTE_READONLY );
+
+	m_cbSeaTemperature = new wxCheckBox( this,
+	                                     ID_CB_SEA_TEMP,
+	                                     _("Sea Temp"),
+	                                     wxDefaultPosition,
+	                                     wxDefaultSize,
+	                                     0 );
+
+	m_tcSeaTemperature = new wxTextCtrl( this,
+	                                     wxID_ANY,
+                                         wxEmptyString,
+                                         wxDefaultPosition,
+                                         wxSize( 70,-1 ),
+                                         wxTE_READONLY );
+	m_tcSeaTemperature->SetToolTip( _("Sea or Air Temperature at Surface Level") );
+
+	m_cbCAPE = new wxCheckBox( this,
+	                           ID_CB_CAPE, _("CAPE"),
+	                           wxDefaultPosition,
+	                           wxDefaultSize,
+	                           0 );
+
+	m_tcCAPE = new wxTextCtrl( this,
+                               wxID_ANY,
+                               wxEmptyString,
+                               wxDefaultPosition,
+                               wxSize( 70,-1 ),
+                               wxTE_READONLY );
+	m_tcCAPE->SetToolTip( _("Convective Available Potential Energy") );
+
+	m_cbReflC = new wxCheckBox( this,
+	                            ID_CB_COMP_REFL,
+	                            _("Comp. Refl."),
+	                            wxDefaultPosition,
+	                            wxDefaultSize,
+	                            0 );
+
+	m_tcReflC = new wxTextCtrl( this,
+	                            wxID_ANY,
+                                wxEmptyString,
+                                wxPoint( -1,-1 ),
+                                wxSize( 70,-1 ),
+                                wxTE_READONLY );
+	m_tcReflC->SetToolTip( _("Composite Reflectivity") );
+
+	m_cbAltitude = new wxCheckBox( this,
+                                   wxID_ANY,
+                                   _("Altitude"),
+                                   wxDefaultPosition,
+                                   wxDefaultSize,
+                                   0 );
+	m_cbAltitude->SetValue(true);
+	m_cbAltitude->Enable( false );
+
+	m_tcAltitude = new wxTextCtrl( this,
+                                   wxID_ANY,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxSize( -1,-1 ),
+                                   wxTE_READONLY );
+	m_tcAltitude->SetMinSize( wxSize( 70,-1 ) );
+
+	m_cbTemp = new wxCheckBox( this,
+                               wxID_ANY,
+                               _("Temp."),
+                               wxDefaultPosition,
+                               wxDefaultSize,
+                               0 );
+	m_cbTemp->SetValue(true);
+	m_cbTemp->Enable( false );
+
+	m_tcTemp = new wxTextCtrl( this,
+	                           wxID_ANY,
+	                           wxEmptyString,
+	                           wxDefaultPosition,
+	                           wxDefaultSize,
+	                           wxTE_READONLY );
+	m_tcTemp->SetMinSize( wxSize( 70,-1 ) );
+
+	m_cbRelHumid = new wxCheckBox( this,
+                                   wxID_ANY,
+                                   _("Relat. Hum."),
+                                   wxDefaultPosition,
+                                   wxDefaultSize,
+                                   0 );
+	m_cbRelHumid->SetValue(true);
+	m_cbRelHumid->Enable( false );
+
+	m_tcRelHumid = new wxTextCtrl( this,
+	                               wxID_ANY,
+	                               wxEmptyString,
+	                               wxDefaultPosition,
+	                               wxDefaultSize,
+	                               wxTE_READONLY );
+	m_tcRelHumid->SetMinSize( wxSize( 70,-1 ) );
+
+
+    ////////////////////////////////////////////////////////////////
+    //Sizer layout Definition
+    ////////////////////////////////////////////////////////////////
+
+    //Sizer for all displayed value
 	m_fgTrackingControls = new wxFlexGridSizer( 0, 8, 0, 0 );
 	m_fgTrackingControls->SetFlexibleDirection( wxBOTH );
 	m_fgTrackingControls->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_cbWind = new wxCheckBox( this, ID_CB_WIND, _("Wind"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbWind, 0, wxEXPAND|wxLEFT|wxTOP, 2 );
+	m_fgTrackingControls->Add( m_cbWind,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWindSpeed,
+                               m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWindSpeedBf,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWindDirection,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_cbWindGust,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWindGust,
+                               m_sfVCentered);
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 ); //Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbPressure,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcPressure,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbWave,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWaveHeight,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWavePeriode,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcWaveDirection,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_cbCurrent,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcCurrentVelocity,
+                               m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcCurrentDirection,
+                               m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbPrecipitation,
+                               m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcPrecipitation,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 ); //Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbCloud,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcCloud,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 ); //Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbAirTemperature,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcAirTemperature,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 ); //Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbSeaTemperature,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcSeaTemperature,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTrackingControls->Add( m_cbCAPE,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcCAPE,
+	                           m_sfVCentered );
+    m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
+
+	m_fgTrackingControls->Add( m_cbReflC,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcReflC,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
+
+	m_fgTrackingControls->Add( m_cbAltitude,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcAltitude,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
+
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
+
+	m_fgTrackingControls->Add( m_cbTemp,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcTemp,
+                               m_sfVCentered );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
 
-	m_tcWindSpeed = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_fgTrackingControls->Add( m_tcWindSpeed, 0, 0, 1 );
+	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );//Spacer
 
-	m_tcWindSpeedBf = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxSize( 45,-1 ), wxTE_READONLY );
-	m_fgTrackingControls->Add( m_tcWindSpeedBf, 0, wxALIGN_CENTER_VERTICAL, 1 );
+	m_fgTrackingControls->Add( m_cbRelHumid,
+	                           m_sfVCentered );
+	m_fgTrackingControls->Add( m_tcRelHumid,
+	                           m_sfVCentered );
 
-	m_tcWindDirection = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 45,-1 ), wxTE_READONLY );
-	m_fgTrackingControls->Add( m_tcWindDirection, 0, 0, 1 );
+	m_fgMainSizer->Add( m_fgTrackingControls, 1, wxEXPAND, 1 );
 
-	m_cbWindGust = new wxCheckBox( this, ID_CB_WIND_GUSTS, _("Wind Gust"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbWindGust, 0, wxALL|wxEXPAND, 5 );
 
-	m_tcWindGust = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_fgTrackingControls->Add( m_tcWindGust, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 );
-
-	m_cbPressure = new wxCheckBox( this, ID_CB_PRESSURE, _("Pressure"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbPressure, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcPressure = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcPressure->SetToolTip( _("Mean Sea Level Pressure (MSLP)") );
-
-	m_fgTrackingControls->Add( m_tcPressure, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbWave = new wxCheckBox( this, ID_CB_WAVES, _("Waves"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbWave, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcWaveHeight = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcWaveHeight->SetToolTip( _("Significant Wave Height") );
-
-	m_fgTrackingControls->Add( m_tcWaveHeight, 0, 0, 1 );
-
-	m_tcWavePeriode = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 45,-1 ), wxTE_READONLY );
-	m_tcWavePeriode->SetToolTip( _("Waves period") );
-
-	m_fgTrackingControls->Add( m_tcWavePeriode, 0, 0, 1 );
-
-	m_tcWaveDirection = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 45,-1 ), wxTE_READONLY );
-	m_tcWaveDirection->SetToolTip( _("Waves Direction") );
-
-	m_fgTrackingControls->Add( m_tcWaveDirection, 0, 0, 1 );
-
-	m_cbCurrent = new wxCheckBox( this, ID_CB_CURRENT, _("Current"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbCurrent, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcCurrentVelocity = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcCurrentVelocity->SetToolTip( _("Surface Current Speed") );
-
-	m_fgTrackingControls->Add( m_tcCurrentVelocity, 0, 0, 1 );
-
-	m_tcCurrentDirection = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 45,-1 ), wxTE_READONLY );
-	m_tcCurrentDirection->SetToolTip( _("Surface Current Direction") );
-
-	m_fgTrackingControls->Add( m_tcCurrentDirection, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbPrecipitation = new wxCheckBox( this, ID_CB_RAINFALL, _("Rainfall"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbPrecipitation, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcPrecipitation = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcPrecipitation->SetToolTip( _("Cumulative Rainfall per Hour") );
-
-	m_fgTrackingControls->Add( m_tcPrecipitation, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbCloud = new wxCheckBox( this, ID_CB_CLOUD_COVER, _("Cloud Cover"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbCloud, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcCloud = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcCloud->SetToolTip( _("Cloud Cover") );
-
-	m_fgTrackingControls->Add( m_tcCloud, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbAirTemperature = new wxCheckBox( this, ID_CB_AIR_TEMP, _("Air Temp"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbAirTemperature, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcAirTemperature = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_fgTrackingControls->Add( m_tcAirTemperature, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbSeaTemperature = new wxCheckBox( this, ID_CB_SEA_TEMP, _("Sea Temp"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbSeaTemperature, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcSeaTemperature = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcSeaTemperature->SetToolTip( _("Sea or Air Temperature at Surface Level") );
-
-	m_fgTrackingControls->Add( m_tcSeaTemperature, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbCAPE = new wxCheckBox( this, ID_CB_CAPE, _("CAPE"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbCAPE, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcCAPE = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcCAPE->SetToolTip( _("Convective Available Potential Energy") );
-
-	m_fgTrackingControls->Add( m_tcCAPE, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbReflC = new wxCheckBox( this, ID_CB_COMP_REFL, _("Comp. Refl."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgTrackingControls->Add( m_cbReflC, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcReflC = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxSize( 70,-1 ), wxTE_READONLY );
-	m_tcReflC->SetToolTip( _("Composite Reflectivity") );
-
-	m_fgTrackingControls->Add( m_tcReflC, 0, 0, 1 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbAltitude = new wxCheckBox( this, wxID_ANY, _("Altitude"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbAltitude->SetValue(true);
-	m_cbAltitude->Enable( false );
-
-	m_fgTrackingControls->Add( m_cbAltitude, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcAltitude = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_READONLY );
-	m_tcAltitude->SetMinSize( wxSize( 70,-1 ) );
-
-	m_fgTrackingControls->Add( m_tcAltitude, 0, 0, 5 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbTemp = new wxCheckBox( this, wxID_ANY, _("Temp."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbTemp->SetValue(true);
-	m_cbTemp->Enable( false );
-
-	m_fgTrackingControls->Add( m_cbTemp, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcTemp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_tcTemp->SetMinSize( wxSize( 70,-1 ) );
-
-	m_fgTrackingControls->Add( m_tcTemp, 0, 0, 5 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_fgTrackingControls->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbRelHumid = new wxCheckBox( this, wxID_ANY, _("Relat. Hum."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbRelHumid->SetValue(true);
-	m_cbRelHumid->Enable( false );
-
-	m_fgTrackingControls->Add( m_cbRelHumid, 0, wxALL|wxEXPAND, 5 );
-
-	m_tcRelHumid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_tcRelHumid->SetMinSize( wxSize( 70,-1 ) );
-
-	m_fgTrackingControls->Add( m_tcRelHumid, 0, 0, 5 );
-	
-
-
-	fgSizer43->Add( m_fgTrackingControls, 1, wxEXPAND, 1 );
-
-
-	fgSizer30->Add( fgSizer43, 1, wxEXPAND, 5 );
-
-
-	this->SetSizer( fgSizer30 );
+	this->SetSizer( m_fgMainSizer );
 	this->Layout();
-	fgSizer30->Fit( this );
+	m_fgMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CursorDataBase::OnMouseEvent ) );
@@ -730,284 +924,596 @@ CursorDataBase::~CursorDataBase()
 
 }
 
+// Settings Window (accessible from the plugin)
 GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
+    //////////////////////////////////////////////////////////////////////
+    // SizerFlags
+    //////////////////////////////////////////////////////////////////////
+    wxSizerFlags m_sfVCentered(1);
+	m_sfVCentered.Border(wxALL, 5)
+	             .Align(wxALIGN_LEFT)
+	             .Align(wxALIGN_CENTER_VERTICAL)
+	             .Proportion(1);
+
+    wxSizerFlags m_sfExpanded(1);
+	m_sfExpanded.Border(wxALL, 5)
+	            .Expand()
+	            .Proportion(1);
+
+    wxSizerFlags m_sfTop(1);
+	m_sfTop.Border(wxALL, 5)
+	       .Align(wxALIGN_LEFT)
+	       .Align(wxALIGN_TOP)
+	       .Proportion(1);
+
+    wxSizerFlags m_sfSizers(1);
+	m_sfSizers.Expand()
+              .Border(wxALL, 5)
+              .Proportion(1);
+
+    wxSizerFlags m_sfSubSizers(1);
+	m_sfSubSizers.Expand()
+                 .Proportion(1);
+
+    //////////////////////////////////////////////////////////////////////
+    // Sizers - Sub-Sizers Init
+    //////////////////////////////////////////////////////////////////////
 	this->SetSizeHints( wxDefaultSize, wxSize( -1,-1 ) );
 
-	wxFlexGridSizer* fgSizer53;
-	fgSizer53 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer53->SetFlexibleDirection( wxBOTH );
-	fgSizer53->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* m_fgMainSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgMainSizer->SetFlexibleDirection( wxBOTH );
+	m_fgMainSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_nSettingsBook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	wxScrolledWindow* m_scSetDataPanel;
-	m_scSetDataPanel = new wxScrolledWindow( m_nSettingsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_nSettingsBook = new wxNotebook( this,
+                                      wxID_ANY,
+                                      wxDefaultPosition,
+                                      wxDefaultSize,
+                                      0 );
+
+	wxScrolledWindow* m_scSetDataPanel = new wxScrolledWindow( m_nSettingsBook,
+	                                                           wxID_ANY,
+	                                                           wxDefaultPosition,
+	                                                           wxDefaultSize,
+	                                                           wxHSCROLL|wxVSCROLL );
 	m_scSetDataPanel->SetScrollRate( 5, 5 );
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetDataPanel - Sub-Sizers Init
+    //////////////////////////////////////////////////////////////////////
+
 	m_fgSetDataSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgSetDataSizer->AddGrowableCol( 0 );
 	m_fgSetDataSizer->AddGrowableRow( 1 );
 	m_fgSetDataSizer->SetFlexibleDirection( wxBOTH );
 	m_fgSetDataSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxStaticBoxSizer* sbSizer101;
-	sbSizer101 = new wxStaticBoxSizer( new wxStaticBox( m_scSetDataPanel, wxID_ANY, _("Data Display Options") ), wxVERTICAL );
+	wxStaticBoxSizer* m_sbDataDisplay = new wxStaticBoxSizer( new wxStaticBox( m_scSetDataPanel,
+	                                                                           wxID_ANY,
+	                                                                           _("Data Display Options WIP") ),
+	                                                                           wxVERTICAL );;
 
-	wxFlexGridSizer* fgSizer15;
-	fgSizer15 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer15->SetFlexibleDirection( wxBOTH );
-	fgSizer15->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* m_fgOptions = new wxFlexGridSizer( 0, 3, 0, 0 );;
+	m_fgOptions->SetFlexibleDirection( wxBOTH );
+	m_fgOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxArrayString m_cDataTypeChoices;
-        m_cDataTypeChoices.Add(_T("Item0"));
-	m_cDataType = new wxChoice( m_scSetDataPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cDataTypeChoices, 0 );
-	m_cDataType->SetSelection( 0 );
-	fgSizer15->Add( m_cDataType, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
-
-	wxStaticText* m_staticText12;
-	m_staticText12 = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	m_staticText12->SetMinSize( wxSize( 110,-1 ) );
-
-	fgSizer15->Add( m_staticText12, 0, wxALL|wxEXPAND, 5 );
-
-	wxArrayString m_cDataUnitsChoices;
-        m_cDataUnitsChoices.Add(_T("Item0"));
-	m_cDataUnits = new wxChoice( m_scSetDataPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cDataUnitsChoices, 0 );
-	m_cDataUnits->SetSelection( 0 );
-	fgSizer15->Add( m_cDataUnits, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
-
-	m_cbBarbedArrows = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Barbed Arrows"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbBarbedArrows, 0, wxBOTTOM|wxTOP, 5 );
 
 	m_fgBarbedData1 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgBarbedData1->SetFlexibleDirection( wxBOTH );
 	m_fgBarbedData1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_cBarbedColoursChoices[] = { _("Default Colour"), _("Controlled Colours") };
-	int m_cBarbedColoursNChoices = sizeof( m_cBarbedColoursChoices ) / sizeof( wxString );
-	m_cBarbedColours = new wxChoice( m_scSetDataPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cBarbedColoursNChoices, m_cBarbedColoursChoices, 0 );
-	m_cBarbedColours->SetSelection( 0 );
-	m_fgBarbedData1->Add( m_cBarbedColours, 0, wxALL|wxEXPAND, 5 );
-
-	wxFlexGridSizer* fgSizer42;
-	fgSizer42 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer42->SetFlexibleDirection( wxBOTH );
-	fgSizer42->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_staticText41;
-	m_staticText41 = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Spacing(pixels)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText41->Wrap( -1 );
-	fgSizer42->Add( m_staticText41, 0, wxALL, 5 );
-
-	m_cBarbArrFixSpac = new wxCheckBox( m_scSetDataPanel, BARBFIXSPACING, _("Fixed"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer42->Add( m_cBarbArrFixSpac, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-
-	fgSizer42->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cBarbArrMinSpac = new wxCheckBox( m_scSetDataPanel, BARBMINSPACING, _("Minimum"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer42->Add( m_cBarbArrMinSpac, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-
-	m_fgBarbedData1->Add( fgSizer42, 1, wxEXPAND, 0 );
-
-
-	fgSizer15->Add( m_fgBarbedData1, 1, wxEXPAND, 0 );
+	wxFlexGridSizer* m_fgBarbedSpacing = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgBarbedSpacing->SetFlexibleDirection( wxBOTH );
+	m_fgBarbedSpacing->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_fgBarbedData2 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgBarbedData2->SetFlexibleDirection( wxBOTH );
 	m_fgBarbedData2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_cBarbedVisibility = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Always visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgBarbedData2->Add( m_cBarbedVisibility, 0, wxALL|wxEXPAND, 5 );
-
-	m_sBarbArrSpacing = new wxSpinCtrl( m_scSetDataPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 30, 100, 30 );
-	m_fgBarbedData2->Add( m_sBarbArrSpacing, 0, wxALL, 5 );
+    m_fgBarbedData2->AddGrowableRow( 0 );
+	m_fgBarbedData2->AddGrowableRow( 1 );
 
 
-	fgSizer15->Add( m_fgBarbedData2, 1, wxEXPAND, 0 );
-
-	m_cbIsoBars = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("IsoBars"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbIsoBars, 0, wxBOTTOM|wxTOP, 5 );
-
-	m_fIsoBarSpacing = new wxFlexGridSizer( 0, 2, 0, 0 );
+    m_fIsoBarSpacing = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_fIsoBarSpacing->SetFlexibleDirection( wxBOTH );
 	m_fIsoBarSpacing->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_tIsoBarSpacing = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Spacing"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tIsoBarSpacing->Wrap( -1 );
-	m_fIsoBarSpacing->Add( m_tIsoBarSpacing, 0, wxALL, 5 );
-
-	m_sIsoBarSpacing = new wxSpinCtrl( m_scSetDataPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 1000, 1 );
-	m_fIsoBarSpacing->Add( m_sIsoBarSpacing, 0, wxALL|wxALIGN_RIGHT, 5 );
-
-
-	fgSizer15->Add( m_fIsoBarSpacing, 1, wxALL|wxEXPAND, 0 );
+    m_fIsoBarSpacing->AddGrowableRow( 0 );
+    m_fIsoBarSpacing->AddGrowableCol( 0 );
 
 	m_fIsoBarVisibility = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fIsoBarVisibility->SetFlexibleDirection( wxBOTH );
 	m_fIsoBarVisibility->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_sIsoBarVisibility = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Always visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fIsoBarVisibility->Add( m_sIsoBarVisibility, 0, wxALL|wxEXPAND, 5 );
-
-
-	fgSizer15->Add( m_fIsoBarVisibility, 1, wxALL|wxEXPAND, 5 );
-
-
-	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbAbbrIsoBarsNumbers = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Abbreviated Numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbAbbrIsoBarsNumbers, 0, wxEXPAND, 5 );
-
-
-	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cbDirectionArrows = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Direction Arrows"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbDirectionArrows, 0, wxBOTTOM|wxTOP, 5 );
-
 	m_fgDirArrData1 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgDirArrData1->SetFlexibleDirection( wxBOTH );
 	m_fgDirArrData1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_cDirectionArrowFormChoices[] = { _("Single Arrow"), _("Double Arrow"), _("Proportional Arrow") };
-	int m_cDirectionArrowFormNChoices = sizeof( m_cDirectionArrowFormChoices ) / sizeof( wxString );
-	m_cDirectionArrowForm = new wxChoice( m_scSetDataPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cDirectionArrowFormNChoices, m_cDirectionArrowFormChoices, 0 );
-	m_cDirectionArrowForm->SetSelection( 1 );
-	m_fgDirArrData1->Add( m_cDirectionArrowForm, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	wxFlexGridSizer* m_fgDirArrSpacing = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgDirArrSpacing->SetFlexibleDirection( wxBOTH );
+	m_fgDirArrSpacing->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxFlexGridSizer* fgSizer43;
-	fgSizer43 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer43->SetFlexibleDirection( wxBOTH );
-	fgSizer43->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_staticText42;
-	m_staticText42 = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Spacing(pixels)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText42->Wrap( -1 );
-	fgSizer43->Add( m_staticText42, 0, wxALL, 5 );
-
-	m_cDirArrFixSpac = new wxCheckBox( m_scSetDataPanel, DIRFIXSPACING, _("Fixed"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer43->Add( m_cDirArrFixSpac, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-
-	fgSizer43->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_cDirArrMinSpac = new wxCheckBox( m_scSetDataPanel, DIRMINSPACING, _("Minimum"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer43->Add( m_cDirArrMinSpac, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-
-	m_fgDirArrData1->Add( fgSizer43, 1, wxEXPAND, 0 );
-
-
-	fgSizer15->Add( m_fgDirArrData1, 1, wxEXPAND, 5 );
-
-	m_fgDirArrData2 = new wxFlexGridSizer( 0, 1, 0, 0 );
+    m_fgDirArrData2 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgDirArrData2->SetFlexibleDirection( wxBOTH );
 	m_fgDirArrData2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxString m_cDirectionArrowSizeChoices[] = { _("Default Size"), _("Small Size") };
-	int m_cDirectionArrowSizeNChoices = sizeof( m_cDirectionArrowSizeChoices ) / sizeof( wxString );
-	m_cDirectionArrowSize = new wxChoice( m_scSetDataPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cDirectionArrowSizeNChoices, m_cDirectionArrowSizeChoices, 0 );
-	m_cDirectionArrowSize->SetSelection( 0 );
-	m_fgDirArrData2->Add( m_cDirectionArrowSize, 0, wxALL|wxEXPAND, 5 );
-
-	m_sDirArrSpacing = new wxSpinCtrl( m_scSetDataPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 30, 100, 30 );
-	m_fgDirArrData2->Add( m_sDirArrSpacing, 0, wxALL, 5 );
-
-
-	fgSizer15->Add( m_fgDirArrData2, 1, wxEXPAND, 0 );
-
-	m_cbOverlayMap = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("OverlayMap"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbOverlayMap, 0, wxBOTTOM|wxTOP, 5 );
-
-	m_tOverlayColors = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Color scheme"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tOverlayColors->Wrap( -1 );
-	fgSizer15->Add( m_tOverlayColors, 0, wxALL|wxEXPAND, 5 );
-
-	wxString m_cOverlayColorsChoices[] = { _("Generic"), _("Wind"), _("Air Temp"), _("Sea Temp"), _("Rainfall"), _("Cloud Cover"), _("Current"), _("CAPE") };
-	int m_cOverlayColorsNChoices = sizeof( m_cOverlayColorsChoices ) / sizeof( wxString );
-	m_cOverlayColors = new wxChoice( m_scSetDataPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cOverlayColorsNChoices, m_cOverlayColorsChoices, 0 );
-	m_cOverlayColors->SetSelection( 0 );
-	fgSizer15->Add( m_cOverlayColors, 0, wxALL|wxEXPAND, 5 );
-
-	m_cbNumbers = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbNumbers, 0, wxBOTTOM|wxTOP, 5 );
 
 	m_fgNumData1 = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_fgNumData1->SetFlexibleDirection( wxBOTH );
 	m_fgNumData1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxStaticText* m_staticText43;
-	m_staticText43 = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Spacing(pixels)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText43->Wrap( -1 );
-	m_fgNumData1->Add( m_staticText43, 0, wxALL, 5 );
+	wxStaticBoxSizer* m_sbTransparency;
+	m_sbTransparency = new wxStaticBoxSizer( new wxStaticBox( m_scSetDataPanel,
+	                                                          wxID_ANY,
+	                                                          _("Transparency for all Overlay Maps") ),
+	                                                          wxVERTICAL );
 
-	m_cNumFixSpac = new wxCheckBox( m_scSetDataPanel, NUMFIXSPACING, _("Fixed"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgNumData1->Add( m_cNumFixSpac, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	wxFlexGridSizer* m_fgTransparency;
+	m_fgTransparency = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgTransparency->SetFlexibleDirection( wxBOTH );
+	m_fgTransparency->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+    //////////////////////////////////////////////////////////////////
+    // m_scSetDataPanel - Widgets definitions
+    //////////////////////////////////////////////////////////////////
 
-	m_fgNumData1->Add( 0, 0, 1, wxEXPAND, 5 );
+	wxArrayString m_cDataTypeChoices;
+        m_cDataTypeChoices.Add(_T("Item0"));
+	m_cDataType = new wxChoice( m_scSetDataPanel,
+	                            wxID_ANY,
+	                            wxDefaultPosition,
+	                            wxDefaultSize,
+	                            m_cDataTypeChoices,
+	                            0 );
+	m_cDataType->SetSelection( 0 );
 
-	m_cNumMinSpac = new wxCheckBox( m_scSetDataPanel, NUMMINSPACING, _("Minimum"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgNumData1->Add( m_cNumMinSpac, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	wxStaticText* m_stUnits = new wxStaticText( m_scSetDataPanel,
+	                                            wxID_ANY,
+	                                            _("Units"),
+	                                            wxDefaultPosition,
+	                                            wxDefaultSize,
+	                                            0 );
+	//m_stUnits->Wrap( -1 );
+	//m_stUnits->SetMinSize( wxSize( 110,-1 ) );
 
+	wxArrayString m_cDataUnitsChoices;
+        m_cDataUnitsChoices.Add(_T("Item0"));
+	m_cDataUnits = new wxChoice( m_scSetDataPanel,
+	                             wxID_ANY,
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 m_cDataUnitsChoices,
+                                 0 );
+	m_cDataUnits->SetSelection( 0 );
 
-	fgSizer15->Add( m_fgNumData1, 1, wxEXPAND, 0 );
+	m_cbBarbedArrows = new wxCheckBox( m_scSetDataPanel,
+	                                   wxID_ANY,
+	                                   _("Barbed Arrows"),
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   0 );
 
-	m_sNumbersSpacing = new wxSpinCtrl( m_scSetDataPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 30, 100, 50 );
-	fgSizer15->Add( m_sNumbersSpacing, 0, wxALL, 5 );
+	wxString m_cBarbedColoursChoices[] = { _("Default Colour"),
+	                                       _("Controlled Colours") };
+	int m_cBarbedColoursNChoices = sizeof( m_cBarbedColoursChoices ) / sizeof( wxString );
+	m_cBarbedColours = new wxChoice( m_scSetDataPanel,
+                                     wxID_ANY,
+                                     wxDefaultPosition,
+                                     wxDefaultSize,
+                                     m_cBarbedColoursNChoices,
+                                     m_cBarbedColoursChoices,
+                                     0 );
+	m_cBarbedColours->SetSelection( 0 );
 
-	m_cbParticles = new wxCheckBox( m_scSetDataPanel, wxID_ANY, _("Particle Map"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_cbParticles, 0, wxBOTTOM|wxTOP, 5 );
+	wxStaticText* m_stSpacing = new wxStaticText( m_scSetDataPanel,
+	                                              wxID_ANY,
+	                                              _("Spacing(pixels)"),
+	                                              wxDefaultPosition,
+	                                              wxDefaultSize,
+	                                              0 );
 
-	m_ctParticles = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Density"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cBarbArrFixSpac = new wxCheckBox( m_scSetDataPanel,
+	                                    BARBFIXSPACING,
+	                                    _("Fixed"),
+	                                    wxDefaultPosition,
+	                                    wxDefaultSize,
+	                                    0 );
+	m_stSpacing->Wrap( -1 );
+
+	m_cBarbArrMinSpac = new wxCheckBox( m_scSetDataPanel,
+                                        BARBMINSPACING,
+                                        _("Minimum"),
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        0 );
+	m_cBarbedVisibility = new wxCheckBox( m_scSetDataPanel,
+	                                      wxID_ANY,
+	                                      _("Always visible"),
+	                                      wxDefaultPosition,
+	                                      wxDefaultSize,
+	                                      0 );
+	m_sBarbArrSpacing = new wxSpinCtrl( m_scSetDataPanel,
+	                                    wxID_ANY,
+                                        wxEmptyString,
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        wxSP_ARROW_KEYS,
+                                        30,
+                                        100,
+                                        30 );
+	m_cbIsoBars = new wxCheckBox( m_scSetDataPanel,
+	                              wxID_ANY,
+	                              _("IsoBars"),
+	                              wxDefaultPosition,
+	                              wxDefaultSize,
+	                              0 );
+	m_tIsoBarSpacing = new wxStaticText( m_scSetDataPanel,
+	                                     wxID_ANY,
+	                                     _("Spacing"),
+	                                     wxDefaultPosition,
+	                                     wxDefaultSize,
+	                                     0 );
+	m_tIsoBarSpacing->Wrap( -1 );
+
+	m_sIsoBarSpacing = new wxSpinCtrl( m_scSetDataPanel,
+                                       wxID_ANY, wxEmptyString,
+                                       wxDefaultPosition,
+                                       wxDefaultSize,
+                                       wxSP_ARROW_KEYS,
+                                       1,
+                                       1000,
+                                       1 );
+	m_sIsoBarVisibility = new wxCheckBox( m_scSetDataPanel,
+	                                      wxID_ANY,
+	                                      _("Always visible"),
+	                                      wxDefaultPosition,
+	                                      wxDefaultSize,
+	                                      0 );
+	m_cbAbbrIsoBarsNumbers = new wxCheckBox( m_scSetDataPanel,
+	                                         wxID_ANY,
+	                                         _("Abbreviated Numbers"),
+	                                         wxDefaultPosition,
+	                                         wxDefaultSize,
+	                                         0 );
+	m_cbDirectionArrows = new wxCheckBox( m_scSetDataPanel,
+	                                      wxID_ANY,
+	                                      _("Direction Arrows"),
+	                                      wxDefaultPosition,
+	                                      wxDefaultSize,
+	                                      0 );
+	wxString m_cDirectionArrowFormChoices[] = { _("Single Arrow"),
+	                                            _("Double Arrow"),
+	                                            _("Proportional Arrow") };
+	int m_cDirectionArrowFormNChoices = sizeof( m_cDirectionArrowFormChoices ) / sizeof( wxString );
+	m_cDirectionArrowForm = new wxChoice( m_scSetDataPanel,
+	                                      wxID_ANY,
+	                                      wxDefaultPosition,
+	                                      wxDefaultSize,
+	                                      m_cDirectionArrowFormNChoices,
+	                                      m_cDirectionArrowFormChoices,
+	                                      0 );
+	m_cDirectionArrowForm->SetSelection( 1 );
+
+	wxStaticText* m_stDirArrSpacing = new wxStaticText( m_scSetDataPanel,
+                                                        wxID_ANY,
+                                                        _("Spacing(pixels)"),
+                                                        wxDefaultPosition,
+                                                        wxDefaultSize,
+                                                        0 );
+	m_stDirArrSpacing->Wrap( -1 );
+
+	m_cDirArrFixSpac = new wxCheckBox( m_scSetDataPanel,
+	                                   DIRFIXSPACING,
+	                                   _("Fixed"),
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   0 );
+	m_cDirArrMinSpac = new wxCheckBox( m_scSetDataPanel,
+	                                   DIRMINSPACING,
+	                                   _("Minimum"),
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   0 );
+	wxString m_cDirectionArrowSizeChoices[] = { _("Default Size"),
+	                                            _("Small Size") };
+	int m_cDirectionArrowSizeNChoices = sizeof( m_cDirectionArrowSizeChoices ) / sizeof( wxString );
+	m_cDirectionArrowSize = new wxChoice( m_scSetDataPanel,
+                                          wxID_ANY,
+                                          wxDefaultPosition,
+                                          wxDefaultSize,
+                                          m_cDirectionArrowSizeNChoices,
+                                          m_cDirectionArrowSizeChoices,
+                                          0 );
+	m_cDirectionArrowSize->SetSelection( 0 );
+
+	m_sDirArrSpacing = new wxSpinCtrl( m_scSetDataPanel,
+	                                   wxID_ANY,
+                                       wxEmptyString,
+                                       wxDefaultPosition,
+                                       wxDefaultSize,
+                                       wxSP_ARROW_KEYS,
+                                       30,
+                                       100,
+                                       30 );
+	m_cbOverlayMap = new wxCheckBox( m_scSetDataPanel,
+	                                 wxID_ANY,
+	                                 _("OverlayMap"),
+	                                 wxDefaultPosition,
+	                                 wxDefaultSize,
+	                                 0 );
+	m_tOverlayColors = new wxStaticText( m_scSetDataPanel,
+	                                     wxID_ANY,
+	                                     _("Color scheme"),
+	                                     wxDefaultPosition,
+	                                     wxDefaultSize,
+	                                     0 );
+	m_tOverlayColors->Wrap( -1 );
+
+	wxString m_cOverlayColorsChoices[] = { _("Generic"),
+	                                       _("Wind"),
+	                                       _("Air Temp"),
+	                                       _("Sea Temp"),
+	                                       _("Rainfall"),
+	                                       _("Cloud Cover"),
+	                                       _("Current"),
+	                                       _("CAPE") };
+	int m_cOverlayColorsNChoices = sizeof( m_cOverlayColorsChoices ) / sizeof( wxString );
+	m_cOverlayColors = new wxChoice( m_scSetDataPanel,
+                                     wxID_ANY,
+                                     wxDefaultPosition,
+                                     wxDefaultSize,
+                                     m_cOverlayColorsNChoices,
+                                     m_cOverlayColorsChoices,
+                                     0 );
+	m_cOverlayColors->SetSelection( 0 );
+
+	m_cbNumbers = new wxCheckBox( m_scSetDataPanel,
+	                              wxID_ANY,
+	                              _("Numbers"),
+	                              wxDefaultPosition,
+	                              wxDefaultSize,
+	                              0 );
+	wxStaticText* m_tNumbersSpacing = new wxStaticText( m_scSetDataPanel,
+	                                  wxID_ANY,
+	                                  _("Spacing(pixels)"),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
+	m_tNumbersSpacing->Wrap( -1 );
+
+	m_cNumFixSpac = new wxCheckBox( m_scSetDataPanel,
+	                                NUMFIXSPACING,
+	                                _("Fixed"),
+	                                wxDefaultPosition,
+	                                wxDefaultSize,
+	                                0 );
+	m_cNumMinSpac = new wxCheckBox( m_scSetDataPanel,
+	                                NUMMINSPACING,
+	                                _("Minimum"),
+	                                wxDefaultPosition,
+	                                wxDefaultSize,
+	                                0 );
+	m_sNumbersSpacing = new wxSpinCtrl( m_scSetDataPanel,
+	                                    wxID_ANY,
+	                                    wxEmptyString,
+	                                    wxDefaultPosition,
+	                                    wxDefaultSize,
+	                                    wxSP_ARROW_KEYS,
+	                                    30,
+	                                    100,
+	                                    50 );
+	m_cbParticles = new wxCheckBox( m_scSetDataPanel,
+	                                wxID_ANY,
+	                                _("Particle Map"),
+	                                wxDefaultPosition,
+	                                wxDefaultSize,
+	                                0 );
+	m_ctParticles = new wxStaticText( m_scSetDataPanel,
+	                                  wxID_ANY,
+	                                  _("Density"),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
 	m_ctParticles->Wrap( -1 );
-	fgSizer15->Add( m_ctParticles, 0, wxALL, 5 );
 
 #if defined(__WXOSX__) && !wxCHECK_VERSION(3, 1, 0)
-    m_sParticleDensity = new wxSlider( m_scSetDataPanel, wxID_ANY, 5, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_BOTTOM|wxSL_HORIZONTAL );
+    m_sParticleDensity = new wxSlider( m_scSetDataPanel,
+                                       wxID_ANY,
+                                       5,
+                                       1,
+                                       10,
+                                       wxDefaultPosition,
+                                       wxDefaultSize,
+                                       wxSL_BOTTOM|wxSL_HORIZONTAL );
 #else
-	m_sParticleDensity = new wxSlider( m_scSetDataPanel, wxID_ANY, 5, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sParticleDensity = new wxSlider( m_scSetDataPanel,
+	                                   wxID_ANY,
+	                                   5,
+	                                   1,
+	                                   10,
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
 #endif
-	fgSizer15->Add( m_sParticleDensity, 0, wxALL|wxEXPAND, 5 );
 
+	m_stOverlayTrans = new wxStaticText( m_scSetDataPanel,
+                                         wxID_ANY,
+                                         _("Overlay Transparency (%)"),
+                                         wxDefaultPosition,
+                                         wxDefaultSize,
+                                         0 );
+	m_stOverlayTrans->Wrap( -1 );
 
-	sbSizer101->Add( fgSizer15, 1, wxEXPAND, 5 );
-
-
-	m_fgSetDataSizer->Add( sbSizer101, 1, wxEXPAND|wxTOP, 10 );
-
-
-	m_fgSetDataSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	wxStaticBoxSizer* sbSizer12;
-	sbSizer12 = new wxStaticBoxSizer( new wxStaticBox( m_scSetDataPanel, wxID_ANY, _("Transparency for all Overlay Maps") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer34;
-	fgSizer34 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer34->SetFlexibleDirection( wxBOTH );
-	fgSizer34->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticText24 = new wxStaticText( m_scSetDataPanel, wxID_ANY, _("Overlay Transparency (%)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText24->Wrap( -1 );
-	fgSizer34->Add( m_staticText24, 0, wxEXPAND|wxRIGHT|wxTOP, 15 );
-
-	m_sTransparency = new wxSlider( m_scSetDataPanel, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxSize( -1,-1 ), wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sTransparency = new wxSlider( m_scSetDataPanel,
+	                                wxID_ANY,
+                                    50,
+                                    0,
+                                    100,
+                                    wxDefaultPosition,
+                                    wxDefaultSize,
+                                    wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sTransparency->SetMinSize( wxSize( 250,-1 ) );
 
-	fgSizer34->Add( m_sTransparency, 0, wxALL|wxEXPAND, 5 );
+    //////////////////////////////////////////////////////////////////////
+    //m_scSetDataPanel - Layout definition
+    //////////////////////////////////////////////////////////////////////
 
+    //m_fgOptions
+	m_fgOptions->Add( m_cDataType,
+	                  m_sfExpanded );
+	m_fgOptions->Add( m_stUnits,
+	                  m_sfVCentered );
+	m_fgOptions->Add( m_cDataUnits,
+	                  m_sfExpanded);
+	m_fgOptions->Add( m_cbBarbedArrows,
+                      m_sfTop);
+    //m_fgBarbedData1
+	m_fgBarbedData1->Add( m_cBarbedColours,
+	                      m_sfExpanded);
+	//m_fgBarbedSpacing
+	m_fgBarbedSpacing->Add( m_stSpacing,
+	                        m_sfVCentered);
+	m_fgBarbedSpacing->Add( m_cBarbArrFixSpac,
+	                        m_sfTop);
+	m_fgBarbedSpacing->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
-	sbSizer12->Add( fgSizer34, 1, wxEXPAND|wxLEFT, 5 );
+	m_fgBarbedSpacing->Add( m_cBarbArrMinSpac,
+	                        m_sfTop );
+	//END m_fgBarbedSpacing
+	m_fgBarbedData1->Add( m_fgBarbedSpacing,
+	                      m_sfSubSizers );
+    //END m_fgBarbedData1
+	m_fgOptions->Add( m_fgBarbedData1,
+	                  m_sfSubSizers );
+    //fgBarbedData2
+	m_fgBarbedData2->Add( m_cBarbedVisibility,
+                          m_sfVCentered );
+	m_fgBarbedData2->Add( m_sBarbArrSpacing,
+	                      m_sfVCentered );
+    //END fgBarbedData2
+	m_fgOptions->Add( m_fgBarbedData2,
+	                  m_sfSubSizers );
+	m_fgOptions->Add( m_cbIsoBars,
+	                  m_sfVCentered );
+    //m_fIsoBarSpacing
+	m_fIsoBarSpacing->Add( m_tIsoBarSpacing,
+	                       m_sfVCentered );
+	m_fIsoBarSpacing->Add( m_sIsoBarSpacing,
+	                       m_sfExpanded );
+    //END m_fIsoBarSpacing
+	m_fgOptions->Add( m_fIsoBarSpacing,
+                      m_sfSubSizers );
+    //m_fIsoBarVisibility
+	m_fIsoBarVisibility->Add( m_sIsoBarVisibility,
+	                          m_sfVCentered );
+    //END m_fIsoBarVisibility
+	m_fgOptions->Add( m_fIsoBarVisibility,
+	                  m_sfSubSizers );
+	m_fgOptions->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
+	m_fgOptions->Add( m_cbAbbrIsoBarsNumbers,
+                      m_sfVCentered );
+	m_fgOptions->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
-	m_fgSetDataSizer->Add( sbSizer12, 1, wxEXPAND|wxTOP, 10 );
+	m_fgOptions->Add( m_cbDirectionArrows,
+	                  m_sfTop );
+    //m_fgDirArrData1
+	m_fgDirArrData1->Add( m_cDirectionArrowForm,
+	                      m_sfExpanded );
+    //m_fgDirArrSpacing
+	m_fgDirArrSpacing->Add( m_stDirArrSpacing,
+	                        m_sfTop );
+	m_fgDirArrSpacing->Add( m_cDirArrFixSpac,
+	                        m_sfTop );
+	m_fgDirArrSpacing->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
+	m_fgDirArrSpacing->Add( m_cDirArrMinSpac,
+	                        m_sfTop );
+    //END m_fgDirArrSpacing
+	m_fgDirArrData1->Add( m_fgDirArrSpacing,
+                          m_sfSubSizers );
+    //END m_fgDirArrData1
+	m_fgOptions->Add( m_fgDirArrData1,
+	                  m_sfSubSizers );
+    //m_fgDirArrData2
+	m_fgDirArrData2->Add( m_cDirectionArrowSize,
+	                      m_sfExpanded );
+	m_fgDirArrData2->Add( m_sDirArrSpacing,
+                          m_sfExpanded);
+    //END m_fgDirArrData2
+	m_fgOptions->Add( m_fgDirArrData2,
+	                  m_sfSubSizers );
+	m_fgOptions->Add( m_cbOverlayMap,
+                      m_sfVCentered );
+	m_fgOptions->Add( m_tOverlayColors,
+                      m_sfVCentered );
+    m_fgOptions->Add( m_cOverlayColors,
+                      m_sfExpanded );
+    m_fgOptions->Add( m_cbNumbers,
+                      m_sfTop );
+    //m_fgNumData1
+	m_fgNumData1->Add( m_tNumbersSpacing,
+                       m_sfTop);
+	m_fgNumData1->Add( m_cNumFixSpac,
+	                   m_sfTop );
+	m_fgNumData1->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgNumData1->Add( m_cNumMinSpac,
+	                   m_sfTop );
+    //END m_fgNumData1
+	m_fgOptions->Add( m_fgNumData1,
+	                  m_sfSubSizers );
+	m_fgOptions->Add( m_sNumbersSpacing,
+                      m_sfVCentered );
+	m_fgOptions->Add( m_cbParticles,
+	                  m_sfVCentered );
+	m_fgOptions->Add( m_ctParticles,
+	                  m_sfVCentered );
+	m_fgOptions->Add( m_sParticleDensity,
+	                  m_sfExpanded );
+    //END m_fgOptions
+	m_sbDataDisplay->Add( m_fgOptions,
+	                      m_sfSizers );
+	m_fgSetDataSizer->Add( m_sbDataDisplay,
+	                       m_sfSizers );
+    m_fgSetDataSizer->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
+
+	m_fgTransparency->Add( m_stOverlayTrans,
+	                       m_sfVCentered );
+	m_fgTransparency->Add( m_sTransparency,
+	                       m_sfExpanded );
+	m_sbTransparency->Add( m_fgTransparency,
+	                       m_sfSubSizers );
+	m_fgSetDataSizer->Add( m_sbTransparency,
+                           m_sfSizers);
 
 	m_scSetDataPanel->SetSizer( m_fgSetDataSizer );
 	m_scSetDataPanel->Layout();
 	m_fgSetDataSizer->Fit( m_scSetDataPanel );
 	m_nSettingsBook->AddPage( m_scSetDataPanel, _("Data"), false );
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetPlaybackPanel - Sub-Sizers Init
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////
+    // m_scSetPlaybackPanel - Widgets definitions
+    //////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetPlaybackPanel - Layout definition
+    //////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetGuiPanel - Sub-Sizers Init
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////
+    // m_scSetGuiPanel - Widgets definitions
+    //////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetGuiPanel - Layout definition
+    //////////////////////////////////////////////////////////////////////
 	wxScrolledWindow* m_scSetPlaybackPanel;
 	m_scSetPlaybackPanel = new wxScrolledWindow( m_nSettingsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_scSetPlaybackPanel->SetScrollRate( 5, 5 );
@@ -1321,7 +1827,7 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_fgSetGuiSizer->Fit( m_scSetGuiPanel );
 	m_nSettingsBook->AddPage( m_scSetGuiPanel, _("GUI"), true );
 
-	fgSizer53->Add( m_nSettingsBook, 1, wxEXPAND | wxALL, 5 );
+	m_fgMainSizer->Add( m_nSettingsBook, 1, wxEXPAND | wxALL, 5 );
 
 	m_sButton = new wxStdDialogButtonSizer();
 	m_sButtonOK = new wxButton( this, wxID_OK );
@@ -1332,14 +1838,15 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_sButton->AddButton( m_sButtonCancel );
 	m_sButton->Realize();
 
-	fgSizer53->Add( m_sButton, 1, wxEXPAND, 5 );
+	m_fgMainSizer->Add( m_sButton, 1, wxEXPAND, 5 );
 
 
-	this->SetSizer( fgSizer53 );
+	this->SetSizer( m_fgMainSizer );
 	this->Layout();
-	fgSizer53->Fit( this );
+	m_fgMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
+
 
 	// Connect Events
 	m_nSettingsBook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( GribSettingsDialogBase::OnPageChange ), NULL, this );
@@ -1400,6 +1907,7 @@ GribSettingsDialogBase::~GribSettingsDialogBase()
 
 }
 
+// Preference Window (accessible from OPENCPN plugin tab)
 #ifndef __OCPN__ANDROID__
 GribPreferencesDialogBase::GribPreferencesDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
@@ -1495,21 +2003,21 @@ GribPreferencesDialogBase::GribPreferencesDialogBase( wxWindow* parent, wxWindow
 
         wxBoxSizer* labelSizer = new wxBoxSizer( wxHORIZONTAL );
         topSizer->Add( labelSizer, 0, wxEXPAND, 5 );
-        
+
         wxStaticText *labelBox = new wxStaticText( this, wxID_ANY, _("GRIB PlugIn Preferences"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
         labelSizer->Add(labelBox, 1, wxEXPAND, 0);
-        
+
         wxScrolledWindow *itemScrollWin = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize(-1, -1), wxVSCROLL);
         topSizer->Add( itemScrollWin, 1, wxEXPAND | wxALL, 0 );
         itemScrollWin->SetScrollRate(2, 2);
-        
+
         wxBoxSizer* itemBoxSizer2 = new wxBoxSizer( wxVERTICAL );
         itemScrollWin->SetSizer( itemBoxSizer2 );
-        
+
         wxStaticBoxSizer* sbSizer9;
         sbSizer9 = new wxStaticBoxSizer( new wxStaticBox( itemScrollWin, wxID_ANY, _("General Options") ), wxVERTICAL );
         itemBoxSizer2->Add( sbSizer9, 1, wxEXPAND, 5 );
-        
+
         m_cbUseHiDef = new wxCheckBox( itemScrollWin, wxID_ANY, _("Use High Definition Graphics"), wxDefaultPosition, wxDefaultSize, 0 );
         sbSizer9->Add( m_cbUseHiDef, 0, wxALL, 5 );
 
@@ -1527,7 +2035,7 @@ GribPreferencesDialogBase::GribPreferencesDialogBase( wxWindow* parent, wxWindow
 
         m_cZoomToCenterAtInit = new wxCheckBox(itemScrollWin, wxID_ANY, _("Zoom to file center when opened"), wxDefaultPosition, wxDefaultSize, 0);
         sbSizer9->Add(m_cZoomToCenterAtInit, 0, wxALL, 5);
- 
+
         wxString m_rbLoadOptionsChoices[] = { _("Load the More Recent File in Directory"), _("Load the Last Opened File") };
         int m_rbLoadOptionsNChoices = sizeof( m_rbLoadOptionsChoices ) / sizeof( wxString );
         m_rbLoadOptions = new wxRadioBox( itemScrollWin, wxID_ANY, _("Load File Options"), wxDefaultPosition, wxDefaultSize, m_rbLoadOptionsNChoices, m_rbLoadOptionsChoices, 1, wxRA_SPECIFY_COLS );
@@ -1549,10 +2057,10 @@ GribPreferencesDialogBase::GribPreferencesDialogBase( wxWindow* parent, wxWindow
 
         wxBoxSizer* m_sdbButtonSizer = new wxBoxSizer( wxHORIZONTAL );
         topSizer->Add( m_sdbButtonSizer, 0, wxEXPAND, 5 );
-        
+
         wxButton *m_sdbButtonSizerOK = new wxButton( this, wxID_OK );
         m_sdbButtonSizer->Add( m_sdbButtonSizerOK, 0, wxALL | wxALIGN_RIGHT, 15 );
-        
+
         wxButton *m_sdbButtonSizerCancel = new wxButton( this, wxID_CANCEL );
         m_sdbButtonSizer->Add( m_sdbButtonSizerCancel, 0, wxALL | wxALIGN_RIGHT, 15 );
 
@@ -1570,7 +2078,7 @@ GribPreferencesDialogBase::~GribPreferencesDialogBase()
 	m_rbStartOptions->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( GribPreferencesDialogBase::OnStartOptionChange ), NULL, this );
 }
 
-
+// Grib download by email window
 GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -2093,6 +2601,7 @@ GribRequestSettingBase::~GribRequestSettingBase()
 
 }
 
+// Undefined
 GRIBTableBase::GRIBTableBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxSize( -1,-1 ) );

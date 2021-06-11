@@ -142,7 +142,7 @@ class GRIBUICtrlBarBase : public wxDialog
 		virtual void OnSettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRequest( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCompositeDialog( wxCommandEvent& event ) { event.Skip(); }
-		
+
 
 	public:
 		wxBitmapButton* m_bpAltitude;
@@ -178,7 +178,7 @@ class CursorDataBase : public wxPanel
 	private:
 
 	protected:
-		wxFlexGridSizer* fgSizer30;
+		wxFlexGridSizer* m_fgMainSizer;
 		wxStaticText* m_stTrackingText;
 		wxFlexGridSizer* m_fgTrackingControls;
 		wxTextCtrl* m_tcWindSpeed;
@@ -294,6 +294,8 @@ class GribSettingsDialogBase : public wxDialog
 		wxStaticBitmap* m_biOpenFile;
 		wxStaticBitmap* m_biSettings;
 		wxStaticBitmap* m_biRequest;
+		wxStaticText* m_stOverlayTrans;
+		wxStaticText* m_stLoopStart;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }
