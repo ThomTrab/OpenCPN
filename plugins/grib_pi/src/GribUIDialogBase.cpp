@@ -437,7 +437,7 @@ CursorDataBase::CursorDataBase( wxWindow* parent, wxWindowID id, const wxPoint& 
 	//sizerRow->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     ////////////////////////////////////////////////////////////////
-    //Sizer Content Definition
+    // Widgets Definition
     ////////////////////////////////////////////////////////////////
 
 	m_cbWind = new wxCheckBox( this,
@@ -694,7 +694,7 @@ CursorDataBase::CursorDataBase( wxWindow* parent, wxWindowID id, const wxPoint& 
 
 
     ////////////////////////////////////////////////////////////////
-    //Sizer layout Definition
+    // Layout Definition
     ////////////////////////////////////////////////////////////////
 
     //Sizer for all displayed value
