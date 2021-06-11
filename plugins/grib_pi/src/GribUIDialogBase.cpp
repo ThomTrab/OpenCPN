@@ -1493,27 +1493,6 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
     // m_scSetPlaybackPanel - Sub-Sizers Init
     //////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////////////////
-    // m_scSetPlaybackPanel - Widgets definitions
-    //////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////
-    // m_scSetPlaybackPanel - Layout definition
-    //////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////
-    // m_scSetGuiPanel - Sub-Sizers Init
-    //////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////
-    // m_scSetGuiPanel - Widgets definitions
-    //////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////
-    // m_scSetGuiPanel - Layout definition
-    //////////////////////////////////////////////////////////////////////
 	wxScrolledWindow* m_scSetPlaybackPanel;
 	m_scSetPlaybackPanel = new wxScrolledWindow( m_nSettingsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_scSetPlaybackPanel->SetScrollRate( 5, 5 );
@@ -1522,43 +1501,82 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_fgSetPlaybackSizer->SetFlexibleDirection( wxBOTH );
 	m_fgSetPlaybackSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxStaticBoxSizer* sbSizer121;
-	sbSizer121 = new wxStaticBoxSizer( new wxStaticBox( m_scSetPlaybackPanel, wxID_ANY, _("Playback Options") ), wxVERTICAL );
+	wxStaticBoxSizer* m_sbPlaybackOptions;
+	m_sbPlaybackOptions = new wxStaticBoxSizer( new wxStaticBox( m_scSetPlaybackPanel,
+                                                                 wxID_ANY,
+                                                                 _("Playback Options") ),
+                                                                 wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer48;
-	fgSizer48 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer48->SetFlexibleDirection( wxBOTH );
-	fgSizer48->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    wxFlexGridSizer* m_fgPlaybackOptions;
+	m_fgPlaybackOptions = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgPlaybackOptions->SetFlexibleDirection( wxBOTH );
+	m_fgPlaybackOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxStaticText* m_staticText4;
-	m_staticText4 = new wxStaticText( m_scSetPlaybackPanel, wxID_ANY, _("Speed Control"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizer48->Add( m_staticText4, 0, wxALL|wxEXPAND, 5 );
+	wxFlexGridSizer* m_fgSlider;
+	m_fgSlider = new wxFlexGridSizer( 0, 3, 0, 0 );
+	m_fgSlider->SetFlexibleDirection( wxBOTH );
+	m_fgSlider->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxFlexGridSizer* fgSizer480;
-	fgSizer480 = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgSizer480->SetFlexibleDirection( wxBOTH );
-	fgSizer480->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    //////////////////////////////////////////////////////////////////
+    // m_scSetPlaybackPanel - Widgets definitions
+    //////////////////////////////////////////////////////////////////
 
-	fgSizer480->Add( 0, 0, 1, wxLEFT|wxRIGHT, 15 );
+	wxStaticText* m_stSpeedControl;
+	m_stSpeedControl = new wxStaticText( m_scSetPlaybackPanel,
+	                                     wxID_ANY,
+	                                     _("Speed Control"),
+	                                     wxDefaultPosition,
+	                                     wxDefaultSize,
+	                                     0 );
+	m_stSpeedControl->Wrap( -1 );
 
-	wxStaticText* m_staticText400;
-	m_staticText400 = new wxStaticText( m_scSetPlaybackPanel, wxID_ANY, _("Slow"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText400->Wrap( -1 );
-	fgSizer480->Add( m_staticText400, 0, wxLEFT|wxTOP, 5 );
+	wxStaticText* m_stSlow;
+	m_stSlow = new wxStaticText( m_scSetPlaybackPanel,
+	                             wxID_ANY,
+                                 _("Slow"),
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 0 );
+	m_stSlow->Wrap( -1 );
 
-	m_sUpdatesPerSecond = new wxSlider( m_scSetPlaybackPanel, wxID_ANY, 4, 2, 12, wxDefaultPosition, wxSize( -1,-1 ), wxSL_HORIZONTAL );
-	fgSizer480->Add( m_sUpdatesPerSecond, 0, wxEXPAND|wxBOTTOM, 5 );
+	m_sUpdatesPerSecond = new wxSlider( m_scSetPlaybackPanel,
+	                                    wxID_ANY,
+	                                    4,
+	                                    2,
+	                                    12,
+	                                    wxDefaultPosition,
+	                                    wxSize( -1,-1 ),
+	                                    wxSL_HORIZONTAL );
 
-	wxStaticText* m_staticText401;
-	m_staticText401 = new wxStaticText( m_scSetPlaybackPanel, wxID_ANY, _("Fast"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText401->Wrap( -1 );
-	fgSizer480->Add( m_staticText401, 0, wxRIGHT|wxTOP, 5 );
+	wxStaticText* m_stFast;
+	m_stFast = new wxStaticText( m_scSetPlaybackPanel,
+	                             wxID_ANY,
+	                             _("Fast"),
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             0 );
+	m_stFast->Wrap( -1 );
 
-	fgSizer48->Add( fgSizer480, 0, wxALL|wxEXPAND, 5 );
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetPlaybackPanel - Layout definition
+    //////////////////////////////////////////////////////////////////////
+
+	m_fgPlaybackOptions->Add( m_stSpeedControl,
+	                          m_sfVCentered );
+	//m_fgSlider->Add( 0, 0, 1, wxLEFT|wxRIGHT, 15 );
+	m_fgSlider->Add( m_stSlow,
+	                 m_sfVCentered );
+	m_fgSlider->Add( m_sUpdatesPerSecond,
+	                 m_sfExpanded);
+	m_fgSlider->Add( m_stFast,
+	                 m_sfVCentered );
+	m_fgPlaybackOptions->Add( m_fgSlider,
+	                          0,
+	                          wxALL|wxALIGN_CENTER_HORIZONTAL,
+	                          5 );
 
 	m_cLoopMode = new wxCheckBox( m_scSetPlaybackPanel, wxID_ANY, _("Loop Mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer48->Add( m_cLoopMode, 0, wxALL, 5 );
+	m_fgPlaybackOptions->Add( m_cLoopMode, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer481;
 	fgSizer481 = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -1577,10 +1595,10 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_cLoopStartPoint->SetSelection( 0 );
 	fgSizer481->Add( m_cLoopStartPoint, 0, wxALL|wxEXPAND, 5 );
 
-	fgSizer48->Add( fgSizer481, 0, wxALL, 5 );
+	m_fgPlaybackOptions->Add( fgSizer481, 0, wxALL, 5 );
 
 	m_cInterpolate = new wxCheckBox( m_scSetPlaybackPanel, wxID_ANY, _("Interpolate between gribs"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer48->Add( m_cInterpolate, 0, wxALL|wxEXPAND, 5 );
+	m_fgPlaybackOptions->Add( m_cInterpolate, 0, wxALL|wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer482;
 	fgSizer482 = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -1598,12 +1616,24 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_sSlicesPerUpdate->SetSelection( 0 );
 	fgSizer482->Add( m_sSlicesPerUpdate, 0, wxALL|wxEXPAND, 5 );
 
-    fgSizer48->Add( fgSizer482, 0, wxALL|wxEXPAND, 5 );
+    m_fgPlaybackOptions->Add( fgSizer482, 0, wxALL|wxEXPAND, 5 );
 
-	sbSizer121->Add( fgSizer48, 1, wxEXPAND|wxALL, 5 );
+	m_sbPlaybackOptions->Add( m_fgPlaybackOptions, 1, wxEXPAND|wxALL, 5 );
 
 
-	m_fgSetPlaybackSizer->Add( sbSizer121, 1, wxEXPAND|wxTOP, 10 );
+	m_fgSetPlaybackSizer->Add( m_sbPlaybackOptions, 1, wxEXPAND|wxTOP, 10 );
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetGuiPanel - Sub-Sizers Init
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////
+    // m_scSetGuiPanel - Widgets definitions
+    //////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+    // m_scSetGuiPanel - Layout definition
+    //////////////////////////////////////////////////////////////////////
 
 
 	m_scSetPlaybackPanel->SetSizer( m_fgSetPlaybackSizer );
