@@ -744,9 +744,12 @@ void GribSettingsDialog::ShowFittingSettings( int settings )
     //Hide all Parameters
     ShowSettings( B_ARROWS, false );
     ShowSettings( ISO_LINE, false );
-    if(m_fIsoBarSpacing->GetItem(m_sIsoBarSpacing) != NULL)  m_fIsoBarSpacing->Detach(m_sIsoBarSpacing);
-    if(m_fIsoBarVisibility->GetItem(m_sIsoBarSpacing) != NULL)  m_fIsoBarVisibility->Detach(m_sIsoBarSpacing);
-    if(m_fIsoBarVisibility->GetItem(m_sIsoBarVisibility) != NULL)  m_fIsoBarVisibility->Detach(m_sIsoBarVisibility);
+    if(m_fIsoBarSpacing->GetItem(m_sIsoBarSpacing) != NULL)
+        m_fIsoBarSpacing->Detach(m_sIsoBarSpacing);
+    if(m_fIsoBarVisibility->GetItem(m_sIsoBarSpacing) != NULL)
+        m_fIsoBarVisibility->Detach(m_sIsoBarSpacing);
+    if(m_fIsoBarVisibility->GetItem(m_sIsoBarVisibility) != NULL)
+        m_fIsoBarVisibility->Detach(m_sIsoBarVisibility);
     ShowSettings( ISO_ABBR, false );
     ShowSettings( D_ARROWS, false  );
     ShowSettings( OVERLAY, false  );
@@ -835,13 +838,22 @@ void GribSettingsDialog::ShowSettings( int params, bool show)
         m_cbAbbrIsoBarsNumbers->Show(show);
         break;
     case ISO_LINE_VISI:
-        m_fIsoBarSpacing->Add(m_sIsoBarSpacing, 0, 5,wxALL|wxEXPAND);
-        m_fIsoBarVisibility->Add(m_sIsoBarVisibility, 0, 5,wxTOP|wxLEFT|wxEXPAND);
-       // m_sIsoBarSpacing->SetMinSize(wxSize(70, -1));
+        m_fIsoBarSpacing->Add(m_sIsoBarSpacing,
+                              m_sfExpanded);
+        m_fIsoBarVisibility->Add(m_sIsoBarVisibility,
+                                 m_sfVCentered);
+        m_sIsoBarSpacing->SetMinSize(wxSize(140, -1));
+//        m_fIsoBarSpacing->Layout();
+//        m_fIsoBarVisibility->Layout();
+        m_fgSetDataSizer->Layout();
         break;
     case ISO_LINE_SHORT:
-        m_fIsoBarVisibility->Add(m_sIsoBarSpacing, 0, 5,wxTOP|wxLEFT|wxEXPAND);
-      //  m_sIsoBarSpacing->SetMinSize(wxSize(-1, -1));
+        m_fIsoBarVisibility->Add(m_sIsoBarSpacing,
+                                 m_sfExpanded);
+        m_sIsoBarSpacing->SetMinSize(wxSize(-1, -1));
+//        m_fIsoBarSpacing->Layout();
+//        m_fIsoBarVisibility->Layout();
+        m_fgSetDataSizer->Layout();
         break;
     case D_ARROWS:
         m_cbDirectionArrows->Show(show);

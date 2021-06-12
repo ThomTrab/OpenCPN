@@ -930,29 +930,25 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
     //////////////////////////////////////////////////////////////////////
     // SizerFlags
     //////////////////////////////////////////////////////////////////////
-    wxSizerFlags m_sfVCentered(1);
+//    m_sfVCentered = new wxSizerFlags;
 	m_sfVCentered.Border(wxALL, 5)
 	             .Align(wxALIGN_LEFT)
 	             .Align(wxALIGN_CENTER_VERTICAL)
 	             .Proportion(1);
 
-    wxSizerFlags m_sfExpanded(1);
 	m_sfExpanded.Border(wxALL, 5)
 	            .Expand()
 	            .Proportion(1);
 
-    wxSizerFlags m_sfTop(1);
 	m_sfTop.Border(wxALL, 5)
 	       .Align(wxALIGN_LEFT)
 	       .Align(wxALIGN_TOP)
 	       .Proportion(1);
 
-    wxSizerFlags m_sfSizers(1);
 	m_sfSizers.Expand()
               .Border(wxALL, 5)
               .Proportion(1);
 
-    wxSizerFlags m_sfSubSizers(1);
 	m_sfSubSizers.Expand()
                  .Proportion(1);
 
@@ -990,7 +986,7 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 
 	wxStaticBoxSizer* m_sbDataDisplay = new wxStaticBoxSizer( new wxStaticBox( m_scSetDataPanel,
 	                                                                           wxID_ANY,
-	                                                                           _("Data Display Options WIP") ),
+	                                                                           _("Data Display Options") ),
 	                                                                           wxVERTICAL );;
 
 	wxFlexGridSizer* m_fgOptions = new wxFlexGridSizer( 0, 3, 0, 0 );;
@@ -1371,11 +1367,15 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_fgBarbedSpacing->Add( m_stSpacing,
 	                        m_sfVCentered);
 	m_fgBarbedSpacing->Add( m_cBarbArrFixSpac,
-	                        m_sfTop);
+	                        0,
+	                        wxALIGN_TOP|wxTOP,
+	                        5);
 	m_fgBarbedSpacing->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
 	m_fgBarbedSpacing->Add( m_cBarbArrMinSpac,
-	                        m_sfTop );
+	                        0,
+	                        wxALIGN_TOP,
+	                        5);
 	//END m_fgBarbedSpacing
 	m_fgBarbedData1->Add( m_fgBarbedSpacing,
 	                      m_sfSubSizers );
@@ -1396,7 +1396,7 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_fIsoBarSpacing->Add( m_tIsoBarSpacing,
 	                       m_sfVCentered );
 	m_fIsoBarSpacing->Add( m_sIsoBarSpacing,
-	                       m_sfExpanded );
+                           m_sfExpanded );
     //END m_fIsoBarSpacing
 	m_fgOptions->Add( m_fIsoBarSpacing,
                       m_sfSubSizers );
@@ -1419,13 +1419,17 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	                      m_sfExpanded );
     //m_fgDirArrSpacing
 	m_fgDirArrSpacing->Add( m_stDirArrSpacing,
-	                        m_sfTop );
+	                        m_sfVCentered );
 	m_fgDirArrSpacing->Add( m_cDirArrFixSpac,
-	                        m_sfTop );
+                            0,
+                            wxALIGN_TOP|wxTOP,
+                            5);
 	m_fgDirArrSpacing->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
 	m_fgDirArrSpacing->Add( m_cDirArrMinSpac,
-	                        m_sfTop );
+                            0,
+                            wxALIGN_TOP|wxTOP,
+                            5);
     //END m_fgDirArrSpacing
 	m_fgDirArrData1->Add( m_fgDirArrSpacing,
                           m_sfSubSizers );
@@ -1450,13 +1454,17 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
                       m_sfTop );
     //m_fgNumData1
 	m_fgNumData1->Add( m_tNumbersSpacing,
-                       m_sfTop);
+                       m_sfVCentered);
 	m_fgNumData1->Add( m_cNumFixSpac,
-	                   m_sfTop );
+                       0,
+                       wxALIGN_TOP|wxTOP,
+                       5);
 	m_fgNumData1->Add( 0, 0, 1, wxEXPAND, 5 ); //Spacer
 
 	m_fgNumData1->Add( m_cNumMinSpac,
-	                   m_sfTop );
+                       0,
+                       wxALIGN_TOP,
+                       5);
     //END m_fgNumData1
 	m_fgOptions->Add( m_fgNumData1,
 	                  m_sfSubSizers );
