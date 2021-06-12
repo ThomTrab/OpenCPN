@@ -2186,48 +2186,111 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
+    //////////////////////////////////////////////////////////////////////
+    // SizerFlags
+    //////////////////////////////////////////////////////////////////////
+	m_sfVCentered.Border(wxALL, 5)
+	             .Align(wxALIGN_LEFT)
+	             .Align(wxALIGN_CENTER_VERTICAL)
+	             .Proportion(1);
+
+	m_sfExpanded.Border(wxALL, 5)
+	            .Expand()
+	            .Proportion(1);
+
+	m_sfTop.Border(wxALL, 5)
+	       .Align(wxALIGN_LEFT)
+	       .Align(wxALIGN_TOP)
+	       .Proportion(1);
+
+	m_sfSizers.Expand()
+              .Border(wxALL, 5)
+              .Proportion(1);
+
+	m_sfSubSizers.Expand()
+                 .Proportion(1);
+
+    //////////////////////////////////////////////////////////////////////
+    // Sizers - Sub-Sizers Definitions
+    //////////////////////////////////////////////////////////////////////
 	wxFlexGridSizer* fgSizer101;
 	fgSizer101 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	fgSizer101->SetFlexibleDirection( wxBOTH );
 	fgSizer101->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_sScrolledDialog = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
+	m_sScrolledDialog = new wxScrolledWindow( this,
+	                                          wxID_ANY,
+	                                          wxDefaultPosition,
+	                                          wxDefaultSize,
+	                                          wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_sScrolledDialog->SetScrollRate( 0, 5 );
+
 	m_fgScrollSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgScrollSizer->SetFlexibleDirection( wxBOTH );
 	m_fgScrollSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxStaticBoxSizer* sbSizer7;
-	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Profile") ), wxVERTICAL );
+	wxStaticBoxSizer* m_sbProfile;
+	m_sbProfile = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog,
+	                                                  wxID_ANY,
+	                                                  _("Profile") ),
+	                                                  wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer17;
-	fgSizer17 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer17->SetFlexibleDirection( wxBOTH );
-	fgSizer17->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* m_fgProfile;
+	m_fgProfile = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgProfile->SetFlexibleDirection( wxBOTH );
+	m_fgProfile->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_pSenderSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_pSenderSizer->AddGrowableCol( 1 );
 	m_pSenderSizer->SetFlexibleDirection( wxBOTH );
 	m_pSenderSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxStaticText* m_staticText25;
-	m_staticText25 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Sender eMail Address"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText25->Wrap( -1 );
-	m_pSenderSizer->Add( m_staticText25, 0, wxALL, 5 );
+    //////////////////////////////////////////////////////////////////
+    // Widgets definitions
+    //////////////////////////////////////////////////////////////////
+	wxStaticText* m_stSenderAdress;
+	m_stSenderAdress = new wxStaticText( m_sScrolledDialog,
+                                       wxID_ANY,
+                                       _("Sender eMail Address"),
+                                       wxDefaultPosition,
+                                       wxDefaultSize,
+                                       0 );
+	m_stSenderAdress->Wrap( -1 );
 
-	m_pSenderAddress = new wxTextCtrl( m_sScrolledDialog, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_pSenderSizer->Add( m_pSenderAddress, 0, wxALL|wxEXPAND, 5 );
+	m_pSenderAddress = new wxTextCtrl( m_sScrolledDialog,
+	                                   wxID_ANY,
+	                                   wxEmptyString,
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   0 );
 
 	wxStaticLine* m_staticline4;
-	m_staticline4 = new wxStaticLine( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_pSenderSizer->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
+	m_staticline4 = new wxStaticLine( m_sScrolledDialog,
+                                      wxID_ANY,
+                                      wxDefaultPosition,
+                                      wxDefaultSize,
+                                      wxLI_HORIZONTAL );
 
 	wxStaticLine* m_staticline5;
-	m_staticline5 = new wxStaticLine( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_pSenderSizer->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
+	m_staticline5 = new wxStaticLine( m_sScrolledDialog,
+	                                  wxID_ANY,
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  wxLI_HORIZONTAL );
+    //////////////////////////////////////////////////////////////////////
+    // Layout definitions
+    //////////////////////////////////////////////////////////////////////
 
-
-	fgSizer17->Add( m_pSenderSizer, 1, wxEXPAND, 5 );
+	m_pSenderSizer->Add( m_stSenderAdress,
+	                     m_sfVCentered );
+	m_pSenderSizer->Add( m_pSenderAddress,
+                         m_sfExpanded );
+	m_pSenderSizer->Add( m_staticline4,
+	                     m_sfExpanded );
+	m_pSenderSizer->Add( m_staticline5,
+	                     m_sfExpanded );
+	m_fgProfile->Add( m_pSenderSizer,
+	                m_sfSubSizers );
 
 	wxFlexGridSizer* fgSizer9;
 	fgSizer9 = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -2329,7 +2392,7 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	fgSizer9->Add( m_fgLog, 1, wxEXPAND, 5 );
 
 
-	fgSizer17->Add( fgSizer9, 1, wxEXPAND, 10 );
+	m_fgProfile->Add( fgSizer9, 1, wxEXPAND, 10 );
 
 	wxFlexGridSizer* fgSizer13;
 	fgSizer13 = new wxFlexGridSizer( 0, 9, 0, 0 );
@@ -2380,13 +2443,13 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	fgSizer13->Add( m_staticText21, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	fgSizer17->Add( fgSizer13, 1, wxEXPAND, 5 );
+	m_fgProfile->Add( fgSizer13, 1, wxEXPAND, 5 );
 
 
-	sbSizer7->Add( fgSizer17, 1, wxEXPAND, 5 );
+	m_sbProfile->Add( m_fgProfile, 1, wxEXPAND, 5 );
 
 
-	m_fgScrollSizer->Add( sbSizer7, 1, wxEXPAND, 5 );
+	m_fgScrollSizer->Add( m_sbProfile, 1, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer81;
 	sbSizer81 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Area Selection") ), wxVERTICAL );

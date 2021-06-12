@@ -385,6 +385,11 @@ class GribRequestSettingBase : public wxDialog
 	private:
 
 	protected:
+        wxSizerFlags m_sfVCentered;
+        wxSizerFlags m_sfExpanded;
+        wxSizerFlags m_sfTop;
+        wxSizerFlags m_sfSizers;
+        wxSizerFlags m_sfSubSizers;
 		wxFlexGridSizer* m_fgScrollSizer;
 		wxFlexGridSizer* m_pSenderSizer;
 		wxTextCtrl* m_pSenderAddress;
