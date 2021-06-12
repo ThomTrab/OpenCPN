@@ -1035,6 +1035,8 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 	m_fIsoBarVisibility = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fIsoBarVisibility->SetFlexibleDirection( wxBOTH );
 	m_fIsoBarVisibility->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    m_fIsoBarVisibility->AddGrowableRow( 0 );
+    m_fIsoBarVisibility->AddGrowableCol( 0 );
 
 	m_fgDirArrData1 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	m_fgDirArrData1->SetFlexibleDirection( wxBOTH );
@@ -1445,7 +1447,7 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
 
 	m_fgDirArrSpacing->Add( m_cDirArrMinSpac,
                             0,
-                            wxALIGN_TOP|wxTOP,
+                            wxALIGN_TOP|wxBOTTOM,
                             5);
     //END m_fgDirArrSpacing
 	m_fgDirArrData1->Add( m_fgDirArrSpacing,
