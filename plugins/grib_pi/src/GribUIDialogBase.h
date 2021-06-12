@@ -407,7 +407,7 @@ class GribRequestSettingBase : public wxDialog
 		wxStaticText* m_tResUnit;
 		wxChoice* m_pInterval;
 		wxChoice* m_pTimeRange;
-		wxStaticText* m_staticText21;
+		wxStaticText* m_stDays;
 		wxCheckBox* m_cManualZoneSel;
 		wxFlexGridSizer* fgZoneCoordinatesSizer;
         wxCheckBox* m_cUseSavedZone;

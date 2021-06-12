@@ -2245,6 +2245,38 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	m_pSenderSizer->SetFlexibleDirection( wxBOTH );
 	m_pSenderSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	wxFlexGridSizer* fgSizer9;
+	fgSizer9 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer9->SetFlexibleDirection( wxBOTH );
+	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* fgSizer33;
+	fgSizer33 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer33->SetFlexibleDirection( wxBOTH );
+	fgSizer33->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* m_fgMovingGrib;
+	m_fgMovingGrib = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgMovingGrib->SetFlexibleDirection( wxBOTH );
+	m_fgMovingGrib->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgMovingGrib->AddGrowableRow(0);
+
+	m_fgMovingParams = new wxFlexGridSizer( 0, 3, 0, 0 );
+	m_fgMovingParams->SetFlexibleDirection( wxBOTH );
+	m_fgMovingParams->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgMovingParams->AddGrowableRow(0);
+	m_fgMovingParams->AddGrowableRow(1);
+	m_fgMovingParams->AddGrowableCol(1);
+
+	m_fgLog = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgLog->SetFlexibleDirection( wxBOTH );
+	m_fgLog->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* m_fgModelParameters;
+	m_fgModelParameters = new wxFlexGridSizer( 0, 9, 0, 0 );
+	m_fgModelParameters->SetFlexibleDirection( wxBOTH );
+	m_fgModelParameters->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
     //////////////////////////////////////////////////////////////////
     // Widgets definitions
     //////////////////////////////////////////////////////////////////
@@ -2277,6 +2309,214 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	                                  wxDefaultPosition,
 	                                  wxDefaultSize,
 	                                  wxLI_HORIZONTAL );
+
+	wxStaticText* m_stMailTo;
+	m_stMailTo = new wxStaticText( m_sScrolledDialog,
+	                               wxID_ANY,
+	                               _("Mail To "),
+	                               wxDefaultPosition,
+	                               wxDefaultSize,
+	                               0 );
+	m_stMailTo->Wrap( -1 );
+
+	wxArrayString m_pMailToChoices;
+	m_pMailTo = new wxChoice( m_sScrolledDialog,
+                              wxID_ANY,
+                              wxDefaultPosition,
+                              wxDefaultSize,
+                              m_pMailToChoices,
+                              0 );
+	m_pMailTo->SetSelection( 0 );
+
+	wxStaticText* m_stForecastModel;
+	m_stForecastModel = new wxStaticText( m_sScrolledDialog,
+	                                      wxID_ANY,
+	                                      _("Forecast Model "),
+	                                      wxDefaultPosition,
+	                                      wxDefaultSize,
+	                                      0 );
+	m_stForecastModel->Wrap( -1 );
+
+	wxArrayString m_pModelChoices;
+	m_pModel = new wxChoice( m_sScrolledDialog,
+                             wxID_ANY,
+                             wxDefaultPosition,
+                             wxDefaultSize,
+                             m_pModelChoices,
+                             0 );
+	m_pModel->SetSelection( 0 );
+
+	m_cMovingGribEnabled = new wxCheckBox( m_sScrolledDialog,
+	                                       wxID_ANY,
+	                                       _("Moving Grib"),
+	                                       wxDefaultPosition,
+	                                       wxDefaultSize,
+	                                       0 );
+
+	wxStaticText* m_stMovingSpeed;
+	m_stMovingSpeed = new wxStaticText( m_sScrolledDialog,
+	                                    wxID_ANY,
+	                                    _("Speed"),
+	                                    wxDefaultPosition,
+	                                    wxDefaultSize,
+	                                    0 );
+	m_stMovingSpeed->Wrap( -1 );
+
+	m_sMovingSpeed = new wxSpinCtrl( m_sScrolledDialog,
+	                                 wxID_ANY,
+	                                 wxEmptyString,
+	                                 wxDefaultPosition,
+	                                 wxDefaultSize,
+	                                 wxSP_ARROW_KEYS,
+	                                 1,
+	                                 30,
+	                                 1 );
+
+	wxStaticText* m_sSpeedUnit;
+	m_sSpeedUnit = new wxStaticText( m_sScrolledDialog,
+                                     wxID_ANY,
+                                     _("Kts"),
+                                     wxDefaultPosition,
+                                     wxDefaultSize,
+                                     0 );
+	m_sSpeedUnit->Wrap( -1 );
+
+	wxStaticText* m_stMovingCourse;
+	m_stMovingCourse = new wxStaticText( m_sScrolledDialog,
+	                                     wxID_ANY,
+	                                     _("Course"),
+	                                     wxDefaultPosition,
+	                                     wxDefaultSize,
+	                                     0 );
+	m_stMovingCourse->Wrap( -1 );
+
+	m_sMovingCourse = new wxSpinCtrl( m_sScrolledDialog,
+                                      wxID_ANY,
+                                      wxEmptyString,
+                                      wxDefaultPosition,
+                                      wxDefaultSize,
+                                      wxSP_ARROW_KEYS,
+                                      1,
+                                      360,
+                                      1 );
+
+	m_sCourseUnit = new wxStaticText( m_sScrolledDialog,
+	                                  wxID_ANY,
+	                                  _("Deg"),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
+	m_sCourseUnit->Wrap( -1 );
+
+    wxStaticText* m_tLogin;
+	m_tLogin = new wxStaticText( m_sScrolledDialog,
+                                 wxID_ANY,
+                                 _("zyGrib Login"),
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 0 );
+	m_tLogin->Wrap( -1 );
+
+	m_pLogin = new wxTextCtrl( m_sScrolledDialog,
+	                           wxID_ANY,
+	                           wxEmptyString,
+	                           wxDefaultPosition,
+	                           wxDefaultSize,
+	                           0 );
+	wxStaticText* m_tCode;
+	m_tCode = new wxStaticText( m_sScrolledDialog,
+                                wxID_ANY,
+                                _("zyGrib Code"),
+                                wxDefaultPosition,
+                                wxDefaultSize,
+                                0 );
+	m_tCode->Wrap( -1 );
+
+	m_pCode = new wxTextCtrl( m_sScrolledDialog,
+	                          wxID_ANY,
+	                          wxEmptyString,
+	                          wxDefaultPosition,
+	                          wxDefaultSize,
+	                          0 );
+
+	wxStaticText* m_stResolution;
+	m_stResolution = new wxStaticText( m_sScrolledDialog,
+	                                   wxID_ANY,
+	                                   _("Resolution"),
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   0 );
+	m_stResolution->Wrap( -1 );
+
+	wxArrayString m_pResolutionChoices;
+	m_pResolution = new wxChoice( m_sScrolledDialog,
+	                              wxID_ANY,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  m_pResolutionChoices,
+                                  0 );
+	m_pResolution->SetSelection( 0 );
+
+	m_tResUnit = new wxStaticText( m_sScrolledDialog,
+	                               wxID_ANY,
+	                               _("Deg"),
+	                               wxDefaultPosition,
+	                               wxDefaultSize,
+	                               0 );
+	m_tResUnit->Wrap( -1 );
+
+	wxStaticText* m_stIntervalParam;
+	m_stIntervalParam = new wxStaticText( m_sScrolledDialog,
+                                          wxID_ANY,
+                                          _("Interval"),
+                                          wxDefaultPosition,
+                                          wxDefaultSize,
+                                          0 );
+	m_stIntervalParam->Wrap( -1 );
+
+	wxArrayString m_pIntervalChoices;
+	m_pInterval = new wxChoice( m_sScrolledDialog,
+	                            wxID_ANY,
+	                            wxDefaultPosition,
+	                            wxDefaultSize,
+	                            m_pIntervalChoices,
+	                            0 );
+	m_pInterval->SetSelection( 0 );
+
+	wxStaticText* m_stHours;
+	m_stHours = new wxStaticText( m_sScrolledDialog,
+	                              wxID_ANY,
+                                  _("Hours"),
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  0 );
+	m_stHours->Wrap( -1 );
+
+	wxStaticText* m_stTimeRange;
+	m_stTimeRange = new wxStaticText( m_sScrolledDialog,
+	                                  wxID_ANY,
+	                                  _("Time Range"),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
+	m_stTimeRange->Wrap( -1 );
+
+	wxArrayString m_pTimeRangeChoices;
+	m_pTimeRange = new wxChoice( m_sScrolledDialog,
+	                             wxID_ANY,
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             m_pTimeRangeChoices,
+	                             0 );
+	m_pTimeRange->SetSelection( 0 );
+
+	m_stDays = new wxStaticText( m_sScrolledDialog,
+	                             wxID_ANY,
+	                             _("Days"),
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             0 );
+	m_stDays->Wrap( -1 );
     //////////////////////////////////////////////////////////////////////
     // Layout definitions
     //////////////////////////////////////////////////////////////////////
@@ -2292,164 +2532,70 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	m_fgProfile->Add( m_pSenderSizer,
 	                m_sfSubSizers );
 
-	wxFlexGridSizer* fgSizer9;
-	fgSizer9 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer9->SetFlexibleDirection( wxBOTH );
-	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxFlexGridSizer* fgSizer33;
-	fgSizer33 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer33->SetFlexibleDirection( wxBOTH );
-	fgSizer33->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_staticText15;
-	m_staticText15 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Mail To "), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText15->Wrap( -1 );
-	fgSizer33->Add( m_staticText15, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	wxArrayString m_pMailToChoices;
-	m_pMailTo = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pMailToChoices, 0 );
-	m_pMailTo->SetSelection( 0 );
-	fgSizer33->Add( m_pMailTo, 0, wxALL, 5 );
-
-	wxStaticText* m_staticText16;
-	m_staticText16 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Forecast Model "), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText16->Wrap( -1 );
-	fgSizer33->Add( m_staticText16, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	wxArrayString m_pModelChoices;
-	m_pModel = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pModelChoices, 0 );
-	m_pModel->SetSelection( 0 );
-	fgSizer33->Add( m_pModel, 0, wxALL, 5 );
-
-
-	fgSizer9->Add( fgSizer33, 1, wxEXPAND, 5 );
-
-	wxFlexGridSizer* fgSizer32;
-	fgSizer32 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer32->SetFlexibleDirection( wxBOTH );
-	fgSizer32->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_cMovingGribEnabled = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Moving Grib"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer32->Add( m_cMovingGribEnabled, 0, wxALL, 5 );
-
-	m_fgMovingParams = new wxFlexGridSizer( 0, 3, 0, 0 );
-	m_fgMovingParams->SetFlexibleDirection( wxBOTH );
-	m_fgMovingParams->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_staticText27;
-	m_staticText27 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Speed"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText27->Wrap( -1 );
-	m_fgMovingParams->Add( m_staticText27, 0, wxALL, 5 );
-
-	m_sMovingSpeed = new wxSpinCtrl( m_sScrolledDialog, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 30, 1 );
-	m_fgMovingParams->Add( m_sMovingSpeed, 0, wxALL, 5 );
-
-	wxStaticText* m_sSpeedUnit;
-	m_sSpeedUnit = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Kts"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sSpeedUnit->Wrap( -1 );
-	m_fgMovingParams->Add( m_sSpeedUnit, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
-
-	wxStaticText* m_staticText29;
-	m_staticText29 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Course"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText29->Wrap( -1 );
-	m_fgMovingParams->Add( m_staticText29, 0, wxALL, 5 );
-
-	m_sMovingCourse = new wxSpinCtrl( m_sScrolledDialog, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 360, 1 );
-	m_fgMovingParams->Add( m_sMovingCourse, 0, wxALL, 5 );
-
-	m_sCourseUnit = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sCourseUnit->Wrap( -1 );
-	m_fgMovingParams->Add( m_sCourseUnit, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
-
-
-	fgSizer32->Add( m_fgMovingParams, 1, wxEXPAND, 5 );
-
-
-	fgSizer9->Add( fgSizer32, 1, wxEXPAND, 5 );
-
-	m_fgLog = new wxFlexGridSizer( 0, 2, 0, 0 );
-	m_fgLog->SetFlexibleDirection( wxBOTH );
-	m_fgLog->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_tLogin;
-	m_tLogin = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("zyGrib Login"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tLogin->Wrap( -1 );
-	m_fgLog->Add( m_tLogin, 0, wxALL, 5 );
-
-	m_pLogin = new wxTextCtrl( m_sScrolledDialog, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgLog->Add( m_pLogin, 0, wxALL, 5 );
-
-	wxStaticText* m_tCode;
-	m_tCode = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("zyGrib Code"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tCode->Wrap( -1 );
-	m_fgLog->Add( m_tCode, 0, wxALL, 5 );
-
-	m_pCode = new wxTextCtrl( m_sScrolledDialog, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgLog->Add( m_pCode, 0, wxALL, 5 );
-
-
-	fgSizer9->Add( m_fgLog, 1, wxEXPAND, 5 );
-
-
-	m_fgProfile->Add( fgSizer9, 1, wxEXPAND, 10 );
-
-	wxFlexGridSizer* fgSizer13;
-	fgSizer13 = new wxFlexGridSizer( 0, 9, 0, 0 );
-	fgSizer13->SetFlexibleDirection( wxBOTH );
-	fgSizer13->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_staticText17;
-	m_staticText17 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Resolution"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText17->Wrap( -1 );
-	fgSizer13->Add( m_staticText17, 0, wxALL, 5 );
-
-	wxArrayString m_pResolutionChoices;
-	m_pResolution = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pResolutionChoices, 0 );
-	m_pResolution->SetSelection( 0 );
-	fgSizer13->Add( m_pResolution, 0, wxALL, 1 );
-
-	m_tResUnit = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tResUnit->Wrap( -1 );
-	fgSizer13->Add( m_tResUnit, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	wxStaticText* m_staticText18;
-	m_staticText18 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Interval"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	fgSizer13->Add( m_staticText18, 0, wxALL, 5 );
-
-	wxArrayString m_pIntervalChoices;
-	m_pInterval = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pIntervalChoices, 0 );
-	m_pInterval->SetSelection( 0 );
-	fgSizer13->Add( m_pInterval, 0, wxALL, 1 );
-
-	wxStaticText* m_staticText20;
-	m_staticText20 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Hours"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText20->Wrap( -1 );
-	fgSizer13->Add( m_staticText20, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	wxStaticText* m_staticText19;
-	m_staticText19 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Time Range"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText19->Wrap( -1 );
-	fgSizer13->Add( m_staticText19, 0, wxALL, 5 );
-
-	wxArrayString m_pTimeRangeChoices;
-	m_pTimeRange = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pTimeRangeChoices, 0 );
-	m_pTimeRange->SetSelection( 0 );
-	fgSizer13->Add( m_pTimeRange, 0, wxALL, 1 );
-
-	m_staticText21 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Days"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText21->Wrap( -1 );
-	fgSizer13->Add( m_staticText21, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-
-	m_fgProfile->Add( fgSizer13, 1, wxEXPAND, 5 );
-
-
-	m_sbProfile->Add( m_fgProfile, 1, wxEXPAND, 5 );
-
-
-	m_fgScrollSizer->Add( m_sbProfile, 1, wxEXPAND, 5 );
+	fgSizer33->Add( m_stMailTo,
+	                m_sfVCentered );
+	fgSizer33->Add( m_pMailTo,
+	                m_sfExpanded );
+	fgSizer33->Add( m_stForecastModel,
+	                m_sfVCentered );
+	fgSizer33->Add( m_pModel,
+	                m_sfExpanded );
+	fgSizer9->Add( fgSizer33,
+                   m_sfSubSizers );
+	m_fgMovingGrib->Add( m_cMovingGribEnabled,
+	                     m_sfVCentered );
+	m_fgMovingParams->Add( m_stMovingSpeed,
+	                       m_sfVCentered );
+	m_fgMovingParams->Add( m_sMovingSpeed,
+	                       m_sfExpanded );
+	m_fgMovingParams->Add( m_sSpeedUnit,
+	                       m_sfVCentered );
+	m_fgMovingParams->Add( m_stMovingCourse,
+	                       m_sfVCentered );
+	m_fgMovingParams->Add( m_sMovingCourse,
+	                       m_sfExpanded );
+	m_fgMovingParams->Add( m_sCourseUnit,
+	                       m_sfVCentered );
+	m_fgMovingGrib->Add( m_fgMovingParams,
+	                     m_sfSubSizers );
+	fgSizer9->Add( m_fgMovingGrib,
+	               m_sfSubSizers );
+	m_fgLog->Add( m_tLogin,
+	              m_sfVCentered );
+	m_fgLog->Add( m_pLogin,
+                  m_sfExpanded );
+	m_fgLog->Add( m_tCode,
+	              m_sfVCentered );
+	m_fgLog->Add( m_pCode,
+	              m_sfExpanded );
+	fgSizer9->Add( m_fgLog,
+	               m_sfSubSizers );
+	m_fgProfile->Add( fgSizer9,
+	                  m_sfSubSizers );
+	m_fgModelParameters->Add( m_stResolution,
+	                          m_sfVCentered );
+	m_fgModelParameters->Add( m_pResolution,
+	                          m_sfExpanded );
+	m_fgModelParameters->Add( m_tResUnit,
+	                          m_sfVCentered );
+	m_fgModelParameters->Add( m_stIntervalParam,
+	                          m_sfVCentered );
+	m_fgModelParameters->Add( m_pInterval,
+	                          m_sfExpanded );
+	m_fgModelParameters->Add( m_stHours,
+	                          m_sfVCentered );
+	m_fgModelParameters->Add( m_stTimeRange,
+	                          m_sfVCentered );
+	m_fgModelParameters->Add( m_pTimeRange,
+	                          m_sfExpanded );
+	m_fgModelParameters->Add( m_stDays,
+	                          m_sfVCentered );
+	m_fgProfile->Add( m_fgModelParameters,
+	                  m_sfSubSizers );
+	m_sbProfile->Add( m_fgProfile,
+	                  m_sfSubSizers );
+	m_fgScrollSizer->Add( m_sbProfile,
+	                      m_sfSizers );
 
 	wxStaticBoxSizer* sbSizer81;
 	sbSizer81 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Area Selection") ), wxVERTICAL );
