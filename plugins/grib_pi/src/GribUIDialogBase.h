@@ -413,7 +413,7 @@ class GribRequestSettingBase : public wxDialog
         wxCheckBox* m_cUseSavedZone;
 		wxSpinCtrl* m_spMaxLat;
 		wxStaticText* m_stMaxLatNS;
-		wxStaticText* m_staticText36;
+		wxStaticText* m_stMaxLong;
 		wxSpinCtrl* m_spMaxLon;
 		wxStaticText* m_stMaxLonEW;
 		wxSpinCtrl* m_spMinLat;

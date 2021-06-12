@@ -128,12 +128,21 @@ void GribRequestSetting::InitRequestConfig()
     GetTextExtent( _T("-360"), &w, &h, 0, 0, OCPNGetFont(_("Dialog"), 10)); // optimal text control size
     w += 30;
     h += 4;
+#ifdef __WXGTK__
+    m_sMovingSpeed->SetMinSize( wxSize(140, h) );
+    m_sMovingCourse->SetMinSize( wxSize(140, h) );
+    m_spMaxLat->SetMinSize( wxSize(140, h) );
+    m_spMinLat->SetMinSize( wxSize(140, h) );
+    m_spMaxLon->SetMinSize( wxSize(140, h) );
+    m_spMinLon->SetMinSize( wxSize(140, h) );
+#else
     m_sMovingSpeed->SetMinSize( wxSize(w, h) );
     m_sMovingCourse->SetMinSize( wxSize(w, h) );
     m_spMaxLat->SetMinSize( wxSize(w, h) );
     m_spMinLat->SetMinSize( wxSize(w, h) );
     m_spMaxLon->SetMinSize( wxSize(w, h) );
     m_spMinLon->SetMinSize( wxSize(w, h) );
+#endif
 
     //add tooltips
     m_pSenderAddress->SetToolTip(_("Address used to send request eMail. (Mandatory for LINUX)"));
@@ -206,8 +215,8 @@ void GribRequestSetting::SetRequestDialogSize()
 #ifdef __WXGTK__
     SetMinSize( wxSize( 0, 0 ) );
 #endif
-    
-     wxWindow *frame = wxTheApp->GetTopWindow();  
+
+     wxWindow *frame = wxTheApp->GetTopWindow();
 
     int w = frame->GetClientSize().x;           // the display size
     int h = frame->GetClientSize().y;
@@ -260,7 +269,7 @@ bool GribRequestSetting::MouseEventHook( wxMouseEvent &event )
 //     wxWindow *win = wxDynamicCast(obj, wxWindow);
 //     if( win && (win != PluginGetFocusCanvas()))
 //         return false;
-    
+
     if( event.LeftDown() ) {
         m_parent.pParent->SetFocus();
         m_ZoneSelMode = DRAW_SELECTION;                         //restart a new drawing
@@ -282,7 +291,7 @@ bool GribRequestSetting::MouseEventHook( wxMouseEvent &event )
             m_StartPoint = event.GetPosition();                                    //starting selection point
             m_RenderZoneOverlay = 2;
         }
-		m_IsMaxLong = m_StartPoint.x > event.GetPosition().x? true: false;         //find if startpoint is max longitude 
+		m_IsMaxLong = m_StartPoint.x > event.GetPosition().x? true: false;         //find if startpoint is max longitude
         GetCanvasLLPix( m_Vp, event.GetPosition(), &m_Lat, &m_Lon);                //extend selection
         if( !m_tMouseEventTimer.IsRunning() ) m_tMouseEventTimer.Start( 20, wxTIMER_ONE_SHOT );
     }
@@ -335,7 +344,7 @@ void GribRequestSetting::OnVpChange(PlugIn_ViewPort *vp)
 {
     if(!vp)
         return;
-        
+
     delete m_Vp;
     m_Vp = new PlugIn_ViewPort(*vp);
 
@@ -601,7 +610,7 @@ bool GribRequestSetting::DoRenderZoneOverlay()
    glDisable( GL_BLEND );
 
    glPopAttrib();
-   
+
 #endif
 #endif
     }
@@ -1084,7 +1093,7 @@ void GribRequestSetting::OnSendMaiL( wxCommandEvent& event  )
         m_pSenderAddress->GetValue()
         );
 #endif
-    
+
     wxEmail mail ;
     if(mail.Send( *message, m_SendMethod)) {
 #ifdef __WXMSW__

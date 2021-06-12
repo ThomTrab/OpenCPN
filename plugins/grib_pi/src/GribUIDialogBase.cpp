@@ -2277,6 +2277,31 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	m_fgModelParameters->SetFlexibleDirection( wxBOTH );
 	m_fgModelParameters->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	wxStaticBoxSizer* m_sbAreaSelection;
+	m_sbAreaSelection = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog,
+	                                                   wxID_ANY,
+	                                                   _("Area Selection") ),
+	                                                   wxVERTICAL );
+
+	wxFlexGridSizer* m_fgAreaSelection;
+	m_fgAreaSelection = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgAreaSelection->SetFlexibleDirection( wxBOTH );
+	m_fgAreaSelection->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+    wxFlexGridSizer* m_fgAreaSelLeft;
+	m_fgAreaSelLeft = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgAreaSelLeft->SetFlexibleDirection( wxBOTH );
+	m_fgAreaSelLeft->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgZoneCoordinatesSizer = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgZoneCoordinatesSizer->SetFlexibleDirection( wxBOTH );
+	fgZoneCoordinatesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	fgZoneCoordinatesSizer->AddGrowableRow(0);
+	fgZoneCoordinatesSizer->AddGrowableRow(1);
+//	fgZoneCoordinatesSizer->AddGrowableCol(0);
+//	fgZoneCoordinatesSizer->AddGrowableCol(1);
+
     //////////////////////////////////////////////////////////////////
     // Widgets definitions
     //////////////////////////////////////////////////////////////////
@@ -2517,6 +2542,127 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	                             wxDefaultSize,
 	                             0 );
 	m_stDays->Wrap( -1 );
+
+	m_cManualZoneSel = new wxCheckBox( m_sScrolledDialog,
+	                                   MANSELECT,
+	                                   _("Manual Selection"),
+	                                   wxDefaultPosition,
+	                                   wxDefaultSize,
+	                                   0 );
+
+    m_cUseSavedZone = new wxCheckBox( m_sScrolledDialog,
+                                      SAVEDZONE,
+                                      _("Use Always this Area"),
+                                      wxDefaultPosition,
+                                      wxDefaultSize,
+                                      0 );
+
+	wxStaticText* m_stMaxLat;
+	m_stMaxLat = new wxStaticText( m_sScrolledDialog,
+                                   wxID_ANY,
+                                   _("Max Lat"),
+                                   wxDefaultPosition,
+                                   wxDefaultSize,
+                                   0 );
+	m_stMaxLat->Wrap( -1 );
+
+	m_spMaxLat = new wxSpinCtrl( m_sScrolledDialog,
+	                             MAXLAT,
+	                             wxEmptyString,
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             wxSP_ARROW_KEYS,
+	                             -180,
+	                             180,
+	                             0 );
+
+	m_stMaxLatNS = new wxStaticText( m_sScrolledDialog,
+	                                 wxID_ANY,
+	                                 _("N"),
+	                                 wxDefaultPosition,
+	                                 wxDefaultSize,
+	                                 0 );
+	m_stMaxLatNS->Wrap( -1 );
+
+	m_stMaxLong = new wxStaticText( m_sScrolledDialog,
+	                                wxID_ANY,
+	                                _("Max Long"),
+	                                wxDefaultPosition,
+	                                wxDefaultSize,
+	                                0 );
+	m_stMaxLong->Wrap( -1 );
+
+	m_spMaxLon = new wxSpinCtrl( m_sScrolledDialog,
+	                             MAXLON,
+	                             wxEmptyString,
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             wxSP_ARROW_KEYS,
+	                             -180,
+	                             180,
+	                             0 );
+
+	m_stMaxLonEW = new wxStaticText( m_sScrolledDialog,
+	                                 wxID_ANY,
+	                                 _("E"),
+	                                 wxDefaultPosition,
+	                                 wxDefaultSize,
+	                                 0 );
+	m_stMaxLonEW->Wrap( -1 );
+
+	wxStaticText* m_stMinLat;
+	m_stMinLat = new wxStaticText( m_sScrolledDialog,
+	                               wxID_ANY,
+	                               _("Min Lat"),
+	                               wxDefaultPosition,
+	                               wxDefaultSize,
+	                               0 );
+	m_stMinLat->Wrap( -1 );
+
+	m_spMinLat = new wxSpinCtrl( m_sScrolledDialog,
+	                             MINLAT,
+	                             wxEmptyString,
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             wxSP_ARROW_KEYS,
+	                             -180,
+	                             180,
+	                             0 );
+
+	m_stMinLatNS = new wxStaticText( m_sScrolledDialog,
+                                     wxID_ANY,
+                                     _("S"),
+                                     wxDefaultPosition,
+                                     wxDefaultSize,
+                                     0 );
+	m_stMinLatNS->Wrap( -1 );
+
+	wxStaticText* m_stMinLong;
+	m_stMinLong = new wxStaticText( m_sScrolledDialog,
+	                                wxID_ANY,
+                                    _("Min Long"),
+                                    wxDefaultPosition,
+                                    wxDefaultSize,
+                                    0 );
+	m_stMinLong->Wrap( -1 );
+
+	m_spMinLon = new wxSpinCtrl( m_sScrolledDialog,
+	                             MINLON,
+	                             wxEmptyString,
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             wxSP_ARROW_KEYS,
+	                             -180,
+	                             180,
+	                             0 );
+
+	m_stMinLonEW = new wxStaticText( m_sScrolledDialog,
+	                                 wxID_ANY,
+	                                 _("W"),
+	                                 wxDefaultPosition,
+	                                 wxDefaultSize,
+	                                 0 );
+	m_stMinLonEW->Wrap( -1 );
     //////////////////////////////////////////////////////////////////////
     // Layout definitions
     //////////////////////////////////////////////////////////////////////
@@ -2597,84 +2743,42 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	m_fgScrollSizer->Add( m_sbProfile,
 	                      m_sfSizers );
 
-	wxStaticBoxSizer* sbSizer81;
-	sbSizer81 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Area Selection") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer36;
-	fgSizer36 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer36->SetFlexibleDirection( wxBOTH );
-	fgSizer36->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-    wxFlexGridSizer* fgSizer37;
-	fgSizer37 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer37->SetFlexibleDirection( wxBOTH );
-	fgSizer37->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_cManualZoneSel = new wxCheckBox( m_sScrolledDialog, MANSELECT, _("Manual Selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer37->Add( m_cManualZoneSel, 0, wxLEFT|wxBOTTOM, 5 );
-
-    m_cUseSavedZone = new wxCheckBox( m_sScrolledDialog, SAVEDZONE, _("Use Always this Area"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer37->Add( m_cUseSavedZone, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-    fgSizer36->Add( fgSizer37, 1, wxEXPAND|wxLEFT, 5 );
-
-	fgZoneCoordinatesSizer = new wxFlexGridSizer( 0, 6, 0, 0 );
-	fgZoneCoordinatesSizer->SetFlexibleDirection( wxBOTH );
-	fgZoneCoordinatesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* m_staticText34;
-	m_staticText34 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Max Lat"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText34->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_staticText34, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_spMaxLat = new wxSpinCtrl( m_sScrolledDialog, MAXLAT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -180, 180, 0 );
-	fgZoneCoordinatesSizer->Add( m_spMaxLat, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_stMaxLatNS = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("N"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxLatNS->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_stMaxLatNS, 0, wxRIGHT, 20 );
-
-	m_staticText36 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Max Long"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText36->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_staticText36, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_spMaxLon = new wxSpinCtrl( m_sScrolledDialog, MAXLON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -180, 180, 0 );
-	fgZoneCoordinatesSizer->Add( m_spMaxLon, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_stMaxLonEW = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("E"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxLonEW->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_stMaxLonEW, 0, wxRIGHT, 5 );
-
-	wxStaticText* m_staticText38;
-	m_staticText38 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Min Lat"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText38->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_staticText38, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_spMinLat = new wxSpinCtrl( m_sScrolledDialog, MINLAT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -180, 180, 0 );
-	fgZoneCoordinatesSizer->Add( m_spMinLat, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_stMinLatNS = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("S"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMinLatNS->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_stMinLatNS, 0, wxRIGHT|wxTOP, 5 );
-
-	wxStaticText* m_staticText40;
-	m_staticText40 = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("Min Long"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText40->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_staticText40, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_spMinLon = new wxSpinCtrl( m_sScrolledDialog, MINLON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -180, 180, 0 );
-	fgZoneCoordinatesSizer->Add( m_spMinLon, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_stMinLonEW = new wxStaticText( m_sScrolledDialog, wxID_ANY, _("W"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMinLonEW->Wrap( -1 );
-	fgZoneCoordinatesSizer->Add( m_stMinLonEW, 0, wxRIGHT|wxTOP, 5 );
-
-	fgSizer36->Add( fgZoneCoordinatesSizer, 1, wxEXPAND|wxLEFT|wxTOP, 5 );
-
-	sbSizer81->Add( fgSizer36, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
-
-
-	m_fgScrollSizer->Add( sbSizer81, 1, wxEXPAND, 5 );
+	m_fgAreaSelLeft->Add( m_cManualZoneSel,
+	                      m_sfVCentered );
+	m_fgAreaSelLeft->Add( m_cUseSavedZone,
+	                      m_sfVCentered );
+    m_fgAreaSelection->Add( m_fgAreaSelLeft,
+                            m_sfSubSizers );
+	fgZoneCoordinatesSizer->Add( m_stMaxLat,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_spMaxLat,
+	                             m_sfExpanded );
+	fgZoneCoordinatesSizer->Add( m_stMaxLatNS,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_stMaxLong,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_spMaxLon,
+	                             m_sfExpanded );
+	fgZoneCoordinatesSizer->Add( m_stMaxLonEW,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_stMinLat,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_spMinLat,
+	                             m_sfExpanded );
+	fgZoneCoordinatesSizer->Add( m_stMinLatNS,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_stMinLong,
+	                             m_sfVCentered );
+	fgZoneCoordinatesSizer->Add( m_spMinLon,
+	                             m_sfExpanded );
+	fgZoneCoordinatesSizer->Add( m_stMinLonEW,
+	                             m_sfVCentered );
+	m_fgAreaSelection->Add( fgZoneCoordinatesSizer,
+                            m_sfSubSizers );
+	m_sbAreaSelection->Add( m_fgAreaSelection,
+	                        m_sfSubSizers );
+	m_fgScrollSizer->Add( m_sbAreaSelection,
+	                      m_sfSizers );
 
 	wxStaticBoxSizer* sbSizer8;
 	sbSizer8 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Data Selection") ), wxVERTICAL );
