@@ -843,17 +843,11 @@ void GribSettingsDialog::ShowSettings( int params, bool show)
         m_fIsoBarVisibility->Add(m_sIsoBarVisibility,
                                  m_sfVCentered);
         m_sIsoBarSpacing->SetMinSize(wxSize(140, -1));
-//        m_fIsoBarSpacing->Layout();
-//        m_fIsoBarVisibility->Layout();
-        m_fgSetDataSizer->Layout();
         break;
     case ISO_LINE_SHORT:
         m_fIsoBarVisibility->Add(m_sIsoBarSpacing,
                                  m_sfExpanded);
         m_sIsoBarSpacing->SetMinSize(wxSize(-1, -1));
-//        m_fIsoBarSpacing->Layout();
-//        m_fIsoBarVisibility->Layout();
-        m_fgSetDataSizer->Layout();
         break;
     case D_ARROWS:
         m_cbDirectionArrows->Show(show);

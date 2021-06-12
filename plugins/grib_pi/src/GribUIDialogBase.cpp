@@ -29,8 +29,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-//wxSizerFlags m_sfVCentered;
-
 // Plugin Main window
 GRIBUICtrlBarBase::GRIBUICtrlBarBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
@@ -950,7 +948,6 @@ GribSettingsDialogBase::GribSettingsDialogBase( wxWindow* parent, wxWindowID id,
     //////////////////////////////////////////////////////////////////////
     // SizerFlags
     //////////////////////////////////////////////////////////////////////
-//    m_sfVCentered = new wxSizerFlags;
 	m_sfVCentered.Border(wxALL, 5)
 	             .Align(wxALIGN_LEFT)
 	             .Align(wxALIGN_CENTER_VERTICAL)
