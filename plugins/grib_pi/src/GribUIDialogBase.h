@@ -431,8 +431,10 @@ class GribRequestSettingBase : public wxDialog
 		wxCheckBox* m_pSeaTemp;
 		wxCheckBox* m_pCurrent;
 		wxCheckBox* m_pWaves;
+		wxFlexGridSizer* m_fgWaves;
 		wxChoice* m_pWModel;
 		wxCheckBox* m_pAltitudeData;
+		wxFlexGridSizer* m_fgGeopotentialHeight;
 		wxFlexGridSizer* m_fgAltitudeData;
 		wxCheckBox* m_p850hpa;
 		wxCheckBox* m_p700hpa;

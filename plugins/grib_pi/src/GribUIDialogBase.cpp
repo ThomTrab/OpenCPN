@@ -2213,10 +2213,10 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
     //////////////////////////////////////////////////////////////////////
     // Sizers - Sub-Sizers Definitions
     //////////////////////////////////////////////////////////////////////
-	wxFlexGridSizer* fgSizer101;
-	fgSizer101 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer101->SetFlexibleDirection( wxBOTH );
-	fgSizer101->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* m_fgMainSizer;
+	m_fgMainSizer = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgMainSizer->SetFlexibleDirection( wxBOTH );
+	m_fgMainSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_sScrolledDialog = new wxScrolledWindow( this,
 	                                          wxID_ANY,
@@ -2271,6 +2271,8 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	m_fgLog = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_fgLog->SetFlexibleDirection( wxBOTH );
 	m_fgLog->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgLog->AddGrowableRow(0);
+	m_fgLog->AddGrowableRow(1);
 
 	wxFlexGridSizer* m_fgModelParameters;
 	m_fgModelParameters = new wxFlexGridSizer( 0, 9, 0, 0 );
@@ -2301,6 +2303,51 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	fgZoneCoordinatesSizer->AddGrowableRow(1);
 //	fgZoneCoordinatesSizer->AddGrowableCol(0);
 //	fgZoneCoordinatesSizer->AddGrowableCol(1);
+
+	wxStaticBoxSizer* m_sbDataSelection;
+	m_sbDataSelection = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog,
+	                                                           wxID_ANY,
+	                                                           _("Data Selection") ),
+	                                                           wxVERTICAL );
+
+	wxFlexGridSizer* m_fgDataSelection;
+	m_fgDataSelection = new wxFlexGridSizer( 0, 3, 0, 0 );
+	m_fgDataSelection->SetFlexibleDirection( wxBOTH );
+	m_fgDataSelection->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+//	wxFlexGridSizer* m_fgWaves;
+	m_fgWaves = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgWaves->SetFlexibleDirection( wxBOTH );
+	m_fgWaves->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgWaves->AddGrowableRow(0);
+
+
+	m_fgGeopotentialHeight = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgGeopotentialHeight->SetFlexibleDirection( wxBOTH );
+	m_fgGeopotentialHeight->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgGeopotentialHeight->AddGrowableRow(0);
+
+	m_fgAltitudeData = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgAltitudeData->SetFlexibleDirection( wxBOTH );
+	m_fgAltitudeData->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticBoxSizer* m_sbMail;
+	m_sbMail = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog,
+	                                                  wxID_ANY,
+	                                                  _("Mail") ),
+	                                                  wxVERTICAL );
+
+	wxFlexGridSizer* m_fgMail;
+	m_fgMail = new wxFlexGridSizer( 0, 1, 0, 0 );
+	m_fgMail->AddGrowableCol( 0 );
+	m_fgMail->SetFlexibleDirection( wxBOTH );
+	m_fgMail->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_fgFixedSizer = new wxFlexGridSizer( 0, 3, 0, 0 );
+	m_fgFixedSizer->SetFlexibleDirection( wxBOTH );
+	m_fgFixedSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_rButton = new wxStdDialogButtonSizer();
 
     //////////////////////////////////////////////////////////////////
     // Widgets definitions
@@ -2583,6 +2630,7 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	                                 wxDefaultSize,
 	                                 0 );
 	m_stMaxLatNS->Wrap( -1 );
+	m_stMaxLatNS->SetMinSize( wxSize(20,-1) );
 
 	m_stMaxLong = new wxStaticText( m_sScrolledDialog,
 	                                wxID_ANY,
@@ -2609,6 +2657,7 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	                                 wxDefaultSize,
 	                                 0 );
 	m_stMaxLonEW->Wrap( -1 );
+	m_stMaxLonEW->SetMinSize( wxSize(20,-1) );
 
 	wxStaticText* m_stMinLat;
 	m_stMinLat = new wxStaticText( m_sScrolledDialog,
@@ -2636,6 +2685,7 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
                                      wxDefaultSize,
                                      0 );
 	m_stMinLatNS->Wrap( -1 );
+	m_stMinLatNS->SetMinSize( wxSize(20,-1) );
 
 	wxStaticText* m_stMinLong;
 	m_stMinLong = new wxStaticText( m_sScrolledDialog,
@@ -2663,10 +2713,159 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	                                 wxDefaultSize,
 	                                 0 );
 	m_stMinLonEW->Wrap( -1 );
+	m_stMinLatNS->SetMinSize( wxSize(20,-1) );
+
+	m_pWind = new wxCheckBox( m_sScrolledDialog,
+	                          wxID_ANY,
+	                          _("Wind"),
+	                          wxDefaultPosition,
+	                          wxDefaultSize,
+	                          0 );
+
+	m_pPress = new wxCheckBox( m_sScrolledDialog,
+	                           wxID_ANY,
+	                           _("Pressure"),
+	                           wxDefaultPosition,
+	                           wxDefaultSize,
+	                           0 );
+
+	m_pWindGust = new wxCheckBox( m_sScrolledDialog,
+	                              wxID_ANY,
+	                              _("Wind Gust"),
+	                              wxDefaultPosition,
+	                              wxDefaultSize,
+	                              0 );
+
+	m_pRainfall = new wxCheckBox( m_sScrolledDialog,
+                                  wxID_ANY,
+                                  _("Rainfall"),
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  0 );
+	m_pCloudCover = new wxCheckBox( m_sScrolledDialog,
+                                    wxID_ANY,
+                                    _("Cloud Cover"),
+                                    wxDefaultPosition,
+                                    wxDefaultSize, 0 );
+
+	m_pAirTemp = new wxCheckBox( m_sScrolledDialog,
+	                             wxID_ANY,
+	                             _("Air Temperature(2m)"),
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             0 );
+	m_pAirTemp->SetValue(true);
+
+	m_pCAPE = new wxCheckBox( m_sScrolledDialog,
+	                          wxID_ANY,
+	                          _("CAPE"),
+	                          wxDefaultPosition,
+	                          wxDefaultSize,
+	                          0 );
+
+	m_pReflectivity = new wxCheckBox( m_sScrolledDialog,
+	                                  wxID_ANY,
+	                                  _("Comp. Reflect."),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
+
+	m_pSeaTemp = new wxCheckBox( m_sScrolledDialog,
+                                 wxID_ANY,
+                                 _("Sea Temperature(surf.)"),
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 0 );
+
+	m_pCurrent = new wxCheckBox( m_sScrolledDialog,
+	                             wxID_ANY,
+	                             _("Current"),
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             0 );
+
+	m_pWaves = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Waves"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	wxArrayString m_pWModelChoices;
+	m_pWModel = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pWModelChoices, 0 );
+	m_pWModel->SetSelection( 0 );
+
+	m_pAltitudeData = new wxCheckBox( m_sScrolledDialog,
+	                                  wxID_ANY,
+	                                  _("Geopotential Height"),
+	                                  wxDefaultPosition,
+	                                  wxDefaultSize,
+	                                  0 );
+
+	m_p850hpa = new wxCheckBox( m_sScrolledDialog,
+                                wxID_ANY,
+                                _("850 hPa"),
+                                wxDefaultPosition,
+                                wxDefaultSize,
+                                0 );
+
+	m_p700hpa = new wxCheckBox( m_sScrolledDialog,
+	                            wxID_ANY,
+	                            _("700 hPa"),
+	                            wxDefaultPosition,
+	                            wxDefaultSize,
+	                            0 );
+	m_p500hpa = new wxCheckBox( m_sScrolledDialog,
+	                            wxID_ANY,
+	                            _("500 hPa"),
+	                            wxDefaultPosition,
+	                            wxDefaultSize,
+	                            0 );
+	m_p300hpa = new wxCheckBox( m_sScrolledDialog,
+	                            wxID_ANY,
+	                            _("300 hPa"),
+	                            wxDefaultPosition,
+	                            wxDefaultSize,
+	                            0 );
+
+	m_MailImage = new wxTextCtrl( m_sScrolledDialog,
+                                  wxID_ANY,
+                                  wxEmptyString,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  wxTE_MULTILINE|wxTE_READONLY );
+
+	wxStaticText* m_stEstFileSize;
+	m_stEstFileSize = new wxStaticText( this,
+	                                    wxID_ANY,
+	                                    _("Estimated File Size"),
+	                                    wxDefaultPosition,
+	                                    wxDefaultSize,
+	                                    0 );
+	m_stEstFileSize->Wrap( -1 );
+
+	m_tFileSize = new wxStaticText( this,
+                                    wxID_ANY,
+                                    wxEmptyString,
+                                    wxDefaultPosition,
+                                    wxDefaultSize,
+                                    0 );
+	m_tFileSize->Wrap( -1 );
+
+	m_tLimit = new wxStaticText( this,
+	                             wxID_ANY,
+	                             _(" (Max size )"),
+	                             wxDefaultPosition,
+	                             wxDefaultSize,
+	                             0 );
+	m_tLimit->Wrap( -1 );
+
+	m_rButtonYes = new wxButton( this, wxID_YES );
+
+	m_rButtonApply = new wxButton( this, wxID_APPLY );
+
+	m_rButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
+
     //////////////////////////////////////////////////////////////////////
     // Layout definitions
     //////////////////////////////////////////////////////////////////////
 
+    // Profile
 	m_pSenderSizer->Add( m_stSenderAdress,
 	                     m_sfVCentered );
 	m_pSenderSizer->Add( m_pSenderAddress,
@@ -2743,6 +2942,7 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	m_fgScrollSizer->Add( m_sbProfile,
 	                      m_sfSizers );
 
+    // Area Selection
 	m_fgAreaSelLeft->Add( m_cManualZoneSel,
 	                      m_sfVCentered );
 	m_fgAreaSelLeft->Add( m_cUseSavedZone,
@@ -2779,158 +2979,90 @@ GribRequestSettingBase::GribRequestSettingBase( wxWindow* parent, wxWindowID id,
 	                        m_sfSubSizers );
 	m_fgScrollSizer->Add( m_sbAreaSelection,
 	                      m_sfSizers );
+    // Data Selection
+	m_fgDataSelection->Add( m_pWind,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pPress,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pWindGust,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pRainfall,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pCloudCover,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pAirTemp,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pCAPE,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pReflectivity,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pSeaTemp,
+	                        m_sfVCentered );
+	m_fgDataSelection->Add( m_pCurrent,
+	                        m_sfVCentered );
+	m_fgWaves->Add( m_pWaves,
+                    m_sfVCentered );
+	m_fgWaves->Add( m_pWModel,
+                    m_sfVCentered );
+	m_fgDataSelection->Add( m_fgWaves,
+	                        m_sfSubSizers );
 
-	wxStaticBoxSizer* sbSizer8;
-	sbSizer8 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Data Selection") ), wxVERTICAL );
+//	m_fgDataSelection->Add( m_pAltitudeData, 0, wxALL|wxEXPAND, 5 );
 
-	wxFlexGridSizer* fgSizer10;
-	fgSizer10 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer10->SetFlexibleDirection( wxBOTH );
-	fgSizer10->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgGeopotentialHeight->Add( m_pAltitudeData,
+	                             m_sfVCentered );
+	m_fgAltitudeData->Add( m_p850hpa,
+                           m_sfVCentered );
+	m_fgAltitudeData->Add( m_p700hpa,
+                           m_sfVCentered );
+	m_fgAltitudeData->Add( m_p500hpa,
+                           m_sfVCentered );
+	m_fgAltitudeData->Add( m_p300hpa,
+                           m_sfVCentered );
+	m_fgGeopotentialHeight->Add( m_fgAltitudeData,
+	                             m_sfSubSizers );
+	m_fgDataSelection->Add( m_fgGeopotentialHeight,
+	                        m_sfSubSizers);
+//	m_fgDataSelection->Add( m_fgAltitudeData, 1, wxEXPAND, 5 );
+	m_sbDataSelection->Add( m_fgDataSelection,
+	                        m_sfSubSizers );
+	m_fgScrollSizer->Add( m_sbDataSelection,
+	                      m_sfSizers );
 
-	m_pWind = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Wind"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pWind, 0, wxALL|wxEXPAND, 5 );
-
-	m_pPress = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Pressure"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pPress, 0, wxALL|wxEXPAND, 5 );
-
-	m_pWindGust = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Wind Gust"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pWindGust, 0, wxALL|wxEXPAND, 5 );
-
-	m_pRainfall = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Rainfall"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pRainfall, 0, wxALL|wxEXPAND, 5 );
-
-	m_pCloudCover = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Cloud Cover"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pCloudCover, 0, wxALL|wxEXPAND, 5 );
-
-	m_pAirTemp = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Air Temperature(2m)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_pAirTemp->SetValue(true);
-	fgSizer10->Add( m_pAirTemp, 0, wxALL|wxEXPAND, 5 );
-
-	m_pCAPE = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("CAPE"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pCAPE, 0, wxALL|wxEXPAND, 5 );
-
-	m_pReflectivity = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Comp. Reflect."), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pReflectivity , 0, wxALL|wxEXPAND, 5 );
-
-	m_pSeaTemp = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Sea Temperature(surf.)"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pSeaTemp, 0, wxALL|wxEXPAND, 5 );
-
-	m_pCurrent = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Current"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_pCurrent, 0, wxALL|wxEXPAND, 5 );
-
-
-	wxFlexGridSizer* fgSizer28;
-	fgSizer28 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer28->SetFlexibleDirection( wxBOTH );
-	fgSizer28->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_pWaves = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Waves"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer28->Add( m_pWaves, 0, wxALL, 5 );
-
-	wxArrayString m_pWModelChoices;
-	m_pWModel = new wxChoice( m_sScrolledDialog, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pWModelChoices, 0 );
-	m_pWModel->SetSelection( 0 );
-	fgSizer28->Add( m_pWModel, 0, wxALL|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 1 );
-
-
-	fgSizer10->Add( fgSizer28, 1, wxEXPAND, 5 );
-
-	wxFlexGridSizer* fgSizer331;
-	fgSizer331 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer331->SetFlexibleDirection( wxBOTH );
-	fgSizer331->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_pAltitudeData = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("Geopotential Height"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer331->Add( m_pAltitudeData, 0, wxALL|wxEXPAND, 5 );
-
-
-	fgSizer10->Add( fgSizer331, 1, wxEXPAND, 5 );
-
-	m_fgAltitudeData = new wxFlexGridSizer( 0, 2, 0, 0 );
-	m_fgAltitudeData->SetFlexibleDirection( wxBOTH );
-	m_fgAltitudeData->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_p850hpa = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("850 hPa"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgAltitudeData->Add( m_p850hpa, 0, wxALL|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
-
-	m_p700hpa = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("700 hPa"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgAltitudeData->Add( m_p700hpa, 0, wxALL|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
-
-	m_p500hpa = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("500 hPa"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgAltitudeData->Add( m_p500hpa, 0, wxALL|wxEXPAND, 5 );
-
-	m_p300hpa = new wxCheckBox( m_sScrolledDialog, wxID_ANY, _("300 hPa"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fgAltitudeData->Add( m_p300hpa, 0, wxALL|wxEXPAND, 5 );
-
-
-	fgSizer10->Add( m_fgAltitudeData, 1, wxEXPAND, 5 );
-
-
-	sbSizer8->Add( fgSizer10, 1, wxEXPAND, 5 );
-
-
-	m_fgScrollSizer->Add( sbSizer8, 1, wxEXPAND|wxTOP, 5 );
-
-	wxStaticBoxSizer* sbSizer6;
-	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( m_sScrolledDialog, wxID_ANY, _("Mail") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer11;
-	fgSizer11 = new wxFlexGridSizer( 0, 1, 0, 0 );
-	fgSizer11->AddGrowableCol( 0 );
-	fgSizer11->SetFlexibleDirection( wxBOTH );
-	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_MailImage = new wxTextCtrl( m_sScrolledDialog, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	fgSizer11->Add( m_MailImage, 0, wxALL|wxEXPAND, 5 );
-
-
-	sbSizer6->Add( fgSizer11, 1, wxEXPAND, 5 );
-
-
-	m_fgScrollSizer->Add( sbSizer6, 1, wxEXPAND, 5 );
-
+    // Mail
+	m_fgMail->Add( m_MailImage,
+	               m_sfExpanded );
+	m_sbMail->Add( m_fgMail,
+	               m_sfSubSizers );
+	m_fgScrollSizer->Add( m_sbMail,
+	                      m_sfSizers );
 
 	m_sScrolledDialog->SetSizer( m_fgScrollSizer );
 	m_sScrolledDialog->Layout();
+
 	m_fgScrollSizer->Fit( m_sScrolledDialog );
-	fgSizer101->Add( m_sScrolledDialog, 1, 0, 5 );
+	m_fgMainSizer->Add( m_sScrolledDialog, 1, 0, 5 );
 
-	m_fgFixedSizer = new wxFlexGridSizer( 0, 3, 0, 0 );
-	m_fgFixedSizer->SetFlexibleDirection( wxBOTH );
-	m_fgFixedSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_fgFixedSizer->Add( m_stEstFileSize,
+	                     m_sfVCentered );
+	m_fgFixedSizer->Add( m_tFileSize,
+	                     m_sfVCentered );
+	m_fgFixedSizer->Add( m_tLimit,
+	                     m_sfVCentered );
+	m_fgMainSizer->Add( m_fgFixedSizer,
+	                    m_sfSubSizers );
 
-	wxStaticText* m_staticText181;
-	m_staticText181 = new wxStaticText( this, wxID_ANY, _("Estimated File Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText181->Wrap( -1 );
-	m_fgFixedSizer->Add( m_staticText181, 0, wxALL, 5 );
-
-	m_tFileSize = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_tFileSize->Wrap( -1 );
-	m_fgFixedSizer->Add( m_tFileSize, 0, wxTOP|wxBOTTOM, 5 );
-
-	m_tLimit = new wxStaticText( this, wxID_ANY, _(" (Max size )"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tLimit->Wrap( -1 );
-	m_fgFixedSizer->Add( m_tLimit, 0, wxALL, 5 );
-
-
-	fgSizer101->Add( m_fgFixedSizer, 1, wxEXPAND, 5 );
-
-	m_rButton = new wxStdDialogButtonSizer();
-	m_rButtonYes = new wxButton( this, wxID_YES );
 	m_rButton->AddButton( m_rButtonYes );
-	m_rButtonApply = new wxButton( this, wxID_APPLY );
 	m_rButton->AddButton( m_rButtonApply );
-	m_rButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
 	m_rButton->AddButton( m_rButtonCancel );
 	m_rButton->Realize();
 
-	fgSizer101->Add( m_rButton, 1, wxEXPAND, 5 );
+	m_fgMainSizer->Add( m_rButton,
+	                    m_sfSizers );
 
-
-	this->SetSizer( fgSizer101 );
+	this->SetSizer( m_fgMainSizer );
 	this->Layout();
-	fgSizer101->Fit( this );
+	m_fgMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 

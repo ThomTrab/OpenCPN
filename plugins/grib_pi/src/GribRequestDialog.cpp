@@ -331,6 +331,7 @@ void GribRequestSetting::SetCoordinatesText()
     m_stMinLonEW->SetLabel( m_spMinLon->GetValue() < 0 ? _("W")  : _("E") );
     m_stMaxLonEW->SetLabel( m_spMaxLon->GetValue() < 0 ? _("W")  : _("E") );
     m_stMinLatNS->SetLabel( m_spMinLat->GetValue() < 0 ? _("S")  : _("N") );
+    fgZoneCoordinatesSizer->Layout();
 }
 
 void GribRequestSetting::StopGraphicalZoneSelection()
@@ -442,8 +443,10 @@ void GribRequestSetting::ApplyRequestConfig( unsigned rs, unsigned it, unsigned 
     m_fgLog->ShowItems(IsZYGRIB);                                           //show/hide zigrib login
 
     m_pWModel->Show(IsZYGRIB && m_pWaves->IsChecked());                     //show/hide waves model
+    m_fgWaves->Layout();
 
     m_fgAltitudeData->ShowItems(m_pAltitudeData->IsChecked());              //show/hide altitude params
+    m_fgGeopotentialHeight->Layout();
 }
 
 void GribRequestSetting::OnTopChange(wxCommandEvent &event)
